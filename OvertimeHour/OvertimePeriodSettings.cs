@@ -1,28 +1,39 @@
 namespace OvertimeHour;
 
-public class OvertimePeriodSettings : List<Period>
+public class OvertimePeriodSettings : List<OvertimePeriodSetting>
 {
-    public OvertimePeriodSettings(params Period[] periods)
+    public OvertimePeriodSettings(params OvertimePeriodSetting[] overtimePeriodSettings)
     {
-        foreach (var period in periods)
+        foreach (var overtimePeriodSetting in overtimePeriodSettings)
         {
-            if (period.IsCrossDay)
+            if (overtimePeriodSetting.Period.IsCrossDay)
             {
-                Add(new Period(period.BaseDate, period.OriginStart, "00:00"));
-                Add(new Period(period.BaseDate.AddDays(1), "00:00", period.OriginEnd));
+                var period = new Period(overtimePeriodSetting.Period.BaseDate, overtimePeriodSetting.Period.OriginStart, "00:00");
+
+                Add(new OvertimePeriodSetting(period,
+                                              overtimePeriodSetting.DayRate,
+                                              overtimePeriodSetting.NightRate,
+                                              overtimePeriodSetting.NightRateDayWithOvertime));
+
+                var crossDayPeriod = new Period(overtimePeriodSetting.Period.BaseDate.AddDays(1), "00:00", overtimePeriodSetting.Period.OriginEnd);
+
+                Add(new OvertimePeriodSetting(crossDayPeriod,
+                                              overtimePeriodSetting.DayRate,
+                                              overtimePeriodSetting.NightRate,
+                                              overtimePeriodSetting.NightRateDayWithOvertime));
             }
             else
             {
-                Add(period);
+                Add(overtimePeriodSetting);
             }
         }
     }
 
     public IEnumerable<Period> SplitPeriod(Period overTimePeriod)
     {
-        foreach (var settingPeriod in this)
+        foreach (var overtimePeriodSetting in this)
         {
-            var overTimeSettingPeriod = settingPeriod.OverlapPeriod(overTimePeriod);
+            var overTimeSettingPeriod = overtimePeriodSetting.Period.OverlapPeriod(overTimePeriod);
 
             if (overTimeSettingPeriod != null)
             {
