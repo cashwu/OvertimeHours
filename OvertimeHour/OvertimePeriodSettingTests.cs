@@ -19,7 +19,7 @@ public class OvertimePeriodSettingTests
 
         overtimePeriodSetting.DayRate.Should().Be(150);
         overtimePeriodSetting.NightRate.Should().Be(200);
-        overtimePeriodSetting.NightRateDayWithOvertime.Should().Be(210);
+        overtimePeriodSetting.NightRateWithDayOvertime.Should().Be(210);
     }
 
     /// <summary>
@@ -35,6 +35,6 @@ public class OvertimePeriodSettingTests
 
         overtimePeriodSetting.DayRate.Should().Be(300);
         overtimePeriodSetting.NightRate.Should().Be(390);
-        overtimePeriodSetting.NightRateDayWithOvertime.Should().Be(0);
+        overtimePeriodSetting.NightRateWithDayOvertime.Should().Be(0);
     }
 }

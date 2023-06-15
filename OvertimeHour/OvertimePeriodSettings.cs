@@ -13,14 +13,14 @@ public class OvertimePeriodSettings : List<OvertimePeriodSetting>
                 Add(new OvertimePeriodSetting(period,
                                               overtimePeriodSetting.DayRate,
                                               overtimePeriodSetting.NightRate,
-                                              overtimePeriodSetting.NightRateDayWithOvertime));
+                                              overtimePeriodSetting.NightRateWithDayOvertime));
 
                 var crossDayPeriod = new Period(overtimePeriodSetting.Period.BaseDate.AddDays(1), "00:00", overtimePeriodSetting.Period.OriginEnd);
 
                 Add(new OvertimePeriodSetting(crossDayPeriod,
                                               overtimePeriodSetting.DayRate,
                                               overtimePeriodSetting.NightRate,
-                                              overtimePeriodSetting.NightRateDayWithOvertime));
+                                              overtimePeriodSetting.NightRateWithDayOvertime));
             }
             else
             {
