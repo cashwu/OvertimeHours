@@ -123,7 +123,7 @@ public class OvertimeSettingsTests
 
         var overtimeSettings = new OvertimeSettings(daySetting, nightSetting);
 
-        var overtimes = overtimeSettings.SplitPeriod(overTimePeriod);
+        var overtimes = overtimeSettings.CreateOvertime(overTimePeriod);
 
         overtimes.Should().BeEquivalentTo(new List<Overtime>
         {
@@ -165,7 +165,7 @@ public class OvertimeSettingsTests
 
         var overtimeSettings = new OvertimeSettings(daySetting, nightSetting);
 
-        var overTimePeriods = overtimeSettings.SplitPeriod(overTimePeriod).ToList();
+        var overTimePeriods = overtimeSettings.CreateOvertime(overTimePeriod).ToList();
 
         overTimePeriods.Should().BeEquivalentTo(new List<Overtime>
         {
@@ -214,7 +214,7 @@ public class OvertimeSettingsTests
 
         var overtimeSettings = new OvertimeSettings(daySetting, nightSetting);
 
-        var overTimePeriods = overtimeSettings.SplitPeriod(overTimePeriod);
+        var overTimePeriods = overtimeSettings.CreateOvertime(overTimePeriod);
 
         overTimePeriods.Should().BeEquivalentTo(new List<Overtime>
         {
@@ -263,7 +263,7 @@ public class OvertimeSettingsTests
 
         var overtimeSettings = new OvertimeSettings(daySetting, nightSetting);
 
-        var overTimePeriods = overtimeSettings.SplitPeriod(overTimePeriod);
+        var overTimePeriods = overtimeSettings.CreateOvertime(overTimePeriod);
 
         overTimePeriods.Should().BeEquivalentTo(new List<Overtime>
         {

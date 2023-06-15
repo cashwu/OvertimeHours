@@ -23,7 +23,7 @@ public class OvertimeSettings : List<OvertimeSetting>
         }
     }
 
-    public List<Overtime> SplitPeriod(Period overTimePeriod)
+    public List<Overtime> CreateOvertime(Period overTimePeriod)
     {
         var result = new List<Overtime>();
 
@@ -36,19 +36,13 @@ public class OvertimeSettings : List<OvertimeSetting>
                 continue;
             }
 
-            var rateNight = result.Any(a => a.Type == EnumRateType.Day)
-                                ? overtimeSetting.Rate.NightWithDayOvertime
-                                : overtimeSetting.Rate.Night;
-
-            var rate = overtimeSetting.Rate.Type == EnumRateType.Day
-                           ? overtimeSetting.Rate.Day
-                           : rateNight;
+            var anyDayOvertime = result.Any(a => a.Type == EnumRateType.Day);
 
             result.Add(new Overtime
             {
                 Start = period.Start,
                 End = period.End,
-                Rate = rate,
+                Rate = overtimeSetting.RealRate(anyDayOvertime),
                 Type = overtimeSetting.Rate.Type
             });
         }
