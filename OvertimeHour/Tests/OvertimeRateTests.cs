@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
 
-namespace OvertimeHour;
+namespace OvertimeHour.Tests;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 public class OvertimeRateTests
