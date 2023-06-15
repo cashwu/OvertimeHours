@@ -38,10 +38,9 @@ public class OvertimeSettingsTests
     public void ctor_1_setting_cross_day()
     {
         var baseDate = new DateTime(2023, 06, 01);
-        var rate = new Rate(200, 210);
 
         var overtimeSetting = new OvertimeSetting(new Period(baseDate, "22:00", "06:00"),
-                                                  rate);
+                                                  new Rate(200, 210));
 
         var overtimeSettings = new OvertimeSettings(overtimeSetting);
 
@@ -50,12 +49,12 @@ public class OvertimeSettingsTests
         var overtimeSettingFirst = overtimeSettings[0];
         overtimeSettingFirst.Period.Start.Should().Be(new DateTime(2023, 06, 01, 22, 00, 00));
         overtimeSettingFirst.Period.End.Should().Be(new DateTime(2023, 06, 02, 00, 00, 00));
-        overtimeSettingFirst.Rate.Should().Be(rate);
+        overtimeSettingFirst.Rate.Should().BeEquivalentTo(new Rate(200, 210));
 
         var overtimeSettingSecond = overtimeSettings[1];
         overtimeSettingSecond.Period.Start.Should().Be(new DateTime(2023, 06, 02, 00, 00, 00));
         overtimeSettingSecond.Period.End.Should().Be(new DateTime(2023, 06, 02, 06, 00, 00));
-        overtimeSettingSecond.Rate.Should().Be(rate);
+        overtimeSettingSecond.Rate.Should().BeEquivalentTo(new Rate(200, 210));
     }
 
     /// <summary>
@@ -70,28 +69,30 @@ public class OvertimeSettingsTests
     {
         var baseDate = new DateTime(2023, 06, 01);
 
-        var dayRate = new Rate(150);
-        var overtimePeriodSetting01 = new OvertimeSetting(new Period(baseDate, "06:00", "22:00"), dayRate);
+        var daySetting = new OvertimeSetting(new Period(baseDate, "06:00", "22:00"),
+                                             new Rate(150));
 
-        var nightRate = new Rate(200, 210);
-        var overtimePeriodSetting02 = new OvertimeSetting(new Period(baseDate, "22:00", "06:00"), nightRate);
+        var nightSetting = new OvertimeSetting(new Period(baseDate, "22:00", "06:00"),
+                                               new Rate(200, 210));
 
-        var overtimeSettings = new OvertimeSettings(overtimePeriodSetting01, overtimePeriodSetting02);
+        var overtimeSettings = new OvertimeSettings(daySetting, nightSetting);
 
         overtimeSettings.Count.Should().Be(3);
 
         var overtimeSettingFirst = overtimeSettings[0];
         overtimeSettingFirst.Period.Start.Should().Be(new DateTime(2023, 06, 01, 06, 00, 00));
         overtimeSettingFirst.Period.End.Should().Be(new DateTime(2023, 06, 01, 22, 00, 00));
-        overtimeSettingFirst.Rate.Should().Be(dayRate);
+        overtimeSettingFirst.Rate.Should().BeEquivalentTo(new Rate(150));
 
         var overtimeSettingSecond = overtimeSettings[1];
         overtimeSettingSecond.Period.Start.Should().Be(new DateTime(2023, 06, 01, 22, 00, 00));
         overtimeSettingSecond.Period.End.Should().Be(new DateTime(2023, 06, 02, 00, 00, 00));
+        overtimeSettingSecond.Rate.Should().BeEquivalentTo(new Rate(200, 210));
 
         var overtimeSettingThird = overtimeSettings[2];
         overtimeSettingThird.Period.Start.Should().Be(new DateTime(2023, 06, 02, 00, 00, 00));
         overtimeSettingThird.Period.End.Should().Be(new DateTime(2023, 06, 02, 06, 00, 00));
+        overtimeSettingThird.Rate.Should().BeEquivalentTo(new Rate(200, 210));
     }
 
     /// <summary>
@@ -112,14 +113,15 @@ public class OvertimeSettingsTests
     {
         var overtimeStart = new DateTime(2023, 06, 01, 18, 00, 00);
         var overtimeEnd = new DateTime(2023, 06, 01, 20, 00, 00);
-
-        var dayRate = new Rate(150);
-        var overtimeSetting01 = new OvertimeSetting(new Period(overtimeStart, "06:00", "22:00"), dayRate);
-        var nightRate = new Rate(200, 210);
-        var overtimeSetting02 = new OvertimeSetting(new Period(overtimeStart, "22:00", "06:00"), nightRate);
-        var overtimeSettings = new OvertimeSettings(overtimeSetting01, overtimeSetting02);
-
         var overTimePeriod = new Period(overtimeStart, overtimeEnd);
+
+        var daySetting = new OvertimeSetting(new Period(overtimeStart.Date, "06:00", "22:00"),
+                                             new Rate(150));
+
+        var nightSetting = new OvertimeSetting(new Period(overtimeStart.Date, "22:00", "06:00"),
+                                               new Rate(200, 210));
+
+        var overtimeSettings = new OvertimeSettings(daySetting, nightSetting);
 
         var overtimes = overtimeSettings.SplitPeriod(overTimePeriod);
 
@@ -153,32 +155,30 @@ public class OvertimeSettingsTests
     {
         var overtimeStart = new DateTime(2023, 06, 01, 22, 00, 00);
         var overtimeEnd = new DateTime(2023, 06, 02, 01, 00, 00);
-
-        var dayRate = new Rate(150);
-        var overtimeSetting01 = new OvertimeSetting(new Period(overtimeStart, "06:00", "22:00"), dayRate);
-        var nightRate = new Rate(200, 210);
-        var overtimeSetting02 = new OvertimeSetting(new Period(overtimeStart, "22:00", "06:00"), nightRate);
-
-        var overtimeSettings = new OvertimeSettings(overtimeSetting01, overtimeSetting02);
-
         var overTimePeriod = new Period(overtimeStart, overtimeEnd);
 
-        var overTimePeriods = overtimeSettings.SplitPeriod(overTimePeriod).ToList();
+        var daySetting = new OvertimeSetting(new Period(overtimeStart.Date, "06:00", "22:00"),
+                                             new Rate(150));
 
-        var crossDay = new DateTime(2023, 06, 02, 00, 00, 00);
+        var nightSetting = new OvertimeSetting(new Period(overtimeStart.Date, "22:00", "06:00"),
+                                               new Rate(200, 210));
+
+        var overtimeSettings = new OvertimeSettings(daySetting, nightSetting);
+
+        var overTimePeriods = overtimeSettings.SplitPeriod(overTimePeriod).ToList();
 
         overTimePeriods.Should().BeEquivalentTo(new List<Overtime>
         {
             new()
             {
                 Start = overtimeStart,
-                End = crossDay,
+                End = new DateTime(2023, 06, 02, 00, 00, 00),
                 Rate = 200,
                 Type = EnumRateType.Night
             },
             new()
             {
-                Start = crossDay,
+                Start = new DateTime(2023, 06, 02, 00, 00, 00),
                 End = overtimeEnd,
                 Rate = 200,
                 Type = EnumRateType.Night
@@ -204,31 +204,30 @@ public class OvertimeSettingsTests
     {
         var overtimeStart = new DateTime(2023, 06, 01, 16, 00, 00);
         var overtimeEnd = new DateTime(2023, 06, 01, 22, 00, 00);
-
-        var dayRate = new Rate(150);
-        var overtimeSetting01 = new OvertimeSetting(new Period(overtimeStart, "06:00", "17:00"), dayRate);
-        var nightRate = new Rate(200, 210);
-        var overtimeSetting02 = new OvertimeSetting(new Period(overtimeStart, "17:00", "06:00"), nightRate);
-
-        var overtimeSettings = new OvertimeSettings(overtimeSetting01, overtimeSetting02);
-
         var overTimePeriod = new Period(overtimeStart, overtimeEnd);
-        var firstSettingEnd = new DateTime(2023, 06, 01, 17, 00, 00);
 
-        var overTimePeriods = overtimeSettings.SplitPeriod(overTimePeriod).ToList();
+        var daySetting = new OvertimeSetting(new Period(overtimeStart, "06:00", "17:00"),
+                                             new Rate(150));
+
+        var nightSetting = new OvertimeSetting(new Period(overtimeStart, "17:00", "06:00"),
+                                               new Rate(200, 210));
+
+        var overtimeSettings = new OvertimeSettings(daySetting, nightSetting);
+
+        var overTimePeriods = overtimeSettings.SplitPeriod(overTimePeriod);
 
         overTimePeriods.Should().BeEquivalentTo(new List<Overtime>
         {
             new()
             {
                 Start = overtimeStart,
-                End = firstSettingEnd,
+                End = new DateTime(2023, 06, 01, 17, 00, 00),
                 Rate = 150,
                 Type = EnumRateType.Day
             },
             new()
             {
-                Start = firstSettingEnd,
+                Start = new DateTime(2023, 06, 01, 17, 00, 00),
                 End = overtimeEnd,
                 Rate = 210,
                 Type = EnumRateType.Night
@@ -254,40 +253,37 @@ public class OvertimeSettingsTests
     {
         var overtimeStart = new DateTime(2023, 06, 01, 16, 00, 00);
         var overtimeEnd = new DateTime(2023, 06, 02, 01, 00, 00);
-
-        var dayRate = new Rate(150);
-        var overtimeSetting01 = new OvertimeSetting(new Period(overtimeStart, "06:00", "17:00"), dayRate);
-        var nightRate = new Rate(200, 210);
-        var overtimeSetting02 = new OvertimeSetting(new Period(overtimeStart, "17:00", "06:00"), nightRate);
-
-        var overtimeSettings = new OvertimeSettings(overtimeSetting01, overtimeSetting02);
-
         var overTimePeriod = new Period(overtimeStart, overtimeEnd);
 
-        var overTimePeriods = overtimeSettings.SplitPeriod(overTimePeriod).ToList();
+        var daySetting = new OvertimeSetting(new Period(overtimeStart, "06:00", "17:00"),
+                                             new Rate(150));
 
-        var crossDay = new DateTime(2023, 06, 02, 00, 00, 00);
-        var firstSettingEnd = new DateTime(2023, 06, 01, 17, 00, 00);
+        var nightSetting = new OvertimeSetting(new Period(overtimeStart, "17:00", "06:00"),
+                                               new Rate(200, 210));
+
+        var overtimeSettings = new OvertimeSettings(daySetting, nightSetting);
+
+        var overTimePeriods = overtimeSettings.SplitPeriod(overTimePeriod);
 
         overTimePeriods.Should().BeEquivalentTo(new List<Overtime>
         {
             new()
             {
                 Start = overtimeStart,
-                End = firstSettingEnd,
+                End = new DateTime(2023, 06, 01, 17, 00, 00),
                 Rate = 150,
                 Type = EnumRateType.Day
             },
             new()
             {
-                Start = firstSettingEnd,
-                End = crossDay,
+                Start = new DateTime(2023, 06, 01, 17, 00, 00),
+                End = new DateTime(2023, 06, 02, 00, 00, 00),
                 Rate = 210,
                 Type = EnumRateType.Night
             },
             new()
             {
-                Start = crossDay,
+                Start = new DateTime(2023, 06, 02, 00, 00, 00),
                 End = overtimeEnd,
                 Rate = 210,
                 Type = EnumRateType.Night
