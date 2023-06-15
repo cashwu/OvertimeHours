@@ -23,18 +23,30 @@ public class OvertimeSettings : List<OvertimeSetting>
         }
     }
 
-    public IEnumerable<(Period period, Rate Rate)> SplitPeriod(Period overTimePeriod)
+    public List<Overtime> SplitPeriod(Period overTimePeriod)
     {
-        var result = new List<(Period period, Rate Rate)>();
+        var result = new List<Overtime>();
 
         foreach (var overtimeSetting in this)
         {
             var period = overtimeSetting.Period.OverlapPeriod(overTimePeriod);
 
-            if (period != null)
+            if (period == null)
             {
-                result.Add(new(period, overtimeSetting.Rate));
+                continue;
             }
+
+            var rate = overtimeSetting.Rate.Type == EnumRateType.Day
+                           ? overtimeSetting.Rate.Day
+                           : overtimeSetting.Rate.Night;
+
+            result.Add(new Overtime
+            {
+                Start = period.Start,
+                End = period.End,
+                Rate = rate,
+                Type = overtimeSetting.Rate.Type
+            });
         }
 
         return result;

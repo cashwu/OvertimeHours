@@ -121,11 +121,17 @@ public class OvertimeSettingsTests
 
         var overTimePeriod = new Period(overtimeStart, overtimeEnd);
 
-        var overTimePeriods = overtimeSettings.SplitPeriod(overTimePeriod).ToList();
+        var overtimes = overtimeSettings.SplitPeriod(overTimePeriod);
 
-        overTimePeriods.Should().BeEquivalentTo(new List<(Period, Rate)>
+        overtimes.Should().BeEquivalentTo(new List<Overtime>
         {
-            (new Period(overtimeStart, overtimeEnd), dayRate)
+            new()
+            {
+                Start = overtimeStart,
+                End = overtimeEnd,
+                Rate = 150,
+                Type = EnumRateType.Day
+            }
         });
     }
 
@@ -161,11 +167,23 @@ public class OvertimeSettingsTests
 
         var crossDay = new DateTime(2023, 06, 02, 00, 00, 00);
 
-        overTimePeriods.Should().BeEquivalentTo(new List<(Period, Rate)>
+        overTimePeriods.Should().BeEquivalentTo(new List<Overtime>
         {
-            (new Period(overtimeStart, crossDay), nightRate),
-            (new Period(crossDay, overtimeEnd), nightRate)
-        }, options => options.Excluding(a => a.Item1.BaseDate));
+            new()
+            {
+                Start = overtimeStart,
+                End = crossDay,
+                Rate = 200,
+                Type = EnumRateType.Night
+            },
+            new()
+            {
+                Start = crossDay,
+                End = overtimeEnd,
+                Rate = 200,
+                Type = EnumRateType.Night
+            }
+        });
     }
 
     /// <summary>
@@ -195,15 +213,27 @@ public class OvertimeSettingsTests
         var overtimeSettings = new OvertimeSettings(overtimeSetting01, overtimeSetting02);
 
         var overTimePeriod = new Period(overtimeStart, overtimeEnd);
-
-        var overTimePeriods = overtimeSettings.SplitPeriod(overTimePeriod).ToList();
         var firstSettingEnd = new DateTime(2023, 06, 01, 17, 00, 00);
 
-        overTimePeriods.Should().BeEquivalentTo(new List<(Period, Rate)>
+        var overTimePeriods = overtimeSettings.SplitPeriod(overTimePeriod).ToList();
+
+        overTimePeriods.Should().BeEquivalentTo(new List<Overtime>
         {
-            (new Period(overtimeStart, firstSettingEnd), dayRate),
-            (new Period(firstSettingEnd, overtimeEnd), nightRate),
-        }, options => options.Excluding(a => a.Item1.BaseDate));
+            new()
+            {
+                Start = overtimeStart,
+                End = firstSettingEnd,
+                Rate = 150,
+                Type = EnumRateType.Day
+            },
+            new()
+            {
+                Start = firstSettingEnd,
+                End = overtimeEnd,
+                Rate = 200,
+                Type = EnumRateType.Night
+            }
+        });
     }
 
     /// <summary>
@@ -239,11 +269,29 @@ public class OvertimeSettingsTests
         var crossDay = new DateTime(2023, 06, 02, 00, 00, 00);
         var firstSettingEnd = new DateTime(2023, 06, 01, 17, 00, 00);
 
-        overTimePeriods.Should().BeEquivalentTo(new List<(Period, Rate)>
+        overTimePeriods.Should().BeEquivalentTo(new List<Overtime>
         {
-            (new Period(overtimeStart, firstSettingEnd), dayRate),
-            (new Period(firstSettingEnd, crossDay), nightRate),
-            (new Period(crossDay, overtimeEnd), nightRate)
-        }, options => options.Excluding(a => a.Item1.BaseDate));
+            new()
+            {
+                Start = overtimeStart,
+                End = firstSettingEnd,
+                Rate = 150,
+                Type = EnumRateType.Day
+            },
+            new()
+            {
+                Start = firstSettingEnd,
+                End = crossDay,
+                Rate = 200,
+                Type = EnumRateType.Night
+            },
+            new()
+            {
+                Start = crossDay,
+                End = overtimeEnd,
+                Rate = 200,
+                Type = EnumRateType.Night
+            }
+        });
     }
 }
