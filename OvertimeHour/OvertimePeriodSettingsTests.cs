@@ -18,7 +18,7 @@ public class OvertimePeriodSettingsTests
     public void ctor_1_setting()
     {
         var baseDate = new DateTime(2023, 06, 01);
-        var overtimePeriodSetting = new OvertimePeriodSetting(new Period(baseDate, "01:00", "02:00"), 0, 0);
+        var overtimePeriodSetting = new OvertimePeriodSetting(new Period(baseDate, "01:00", "02:00"), new OvertimeRate(0, 0));
         var overtimePeriodSettings = new OvertimePeriodSettings(overtimePeriodSetting);
 
         overtimePeriodSettings.Count.Should().Be(1);
@@ -36,7 +36,7 @@ public class OvertimePeriodSettingsTests
     {
         var baseDate = new DateTime(2023, 06, 01);
 
-        var overtimePeriodSetting = new OvertimePeriodSetting(new Period(baseDate, "23:00", "02:00"), 0, 0);
+        var overtimePeriodSetting = new OvertimePeriodSetting(new Period(baseDate, "23:00", "02:00"), new OvertimeRate(0, 0));
         var overtimePeriodSettings = new OvertimePeriodSettings(overtimePeriodSetting);
 
         overtimePeriodSettings.Count.Should().Be(2);
@@ -62,8 +62,8 @@ public class OvertimePeriodSettingsTests
     {
         var baseDate = new DateTime(2023, 06, 01);
 
-        var overtimePeriodSetting01 = new OvertimePeriodSetting(new Period(baseDate, "06:00", "17:00"), 0, 0);
-        var overtimePeriodSetting02 = new OvertimePeriodSetting(new Period(baseDate, "17:00", "06:00"), 0, 0);
+        var overtimePeriodSetting01 = new OvertimePeriodSetting(new Period(baseDate, "06:00", "17:00"), new OvertimeRate(0, 0));
+        var overtimePeriodSetting02 = new OvertimePeriodSetting(new Period(baseDate, "17:00", "06:00"), new OvertimeRate(0, 0));
 
         var overtimePeriodSettings = new OvertimePeriodSettings(overtimePeriodSetting01, overtimePeriodSetting02);
 
@@ -101,8 +101,8 @@ public class OvertimePeriodSettingsTests
         var overtimeStart = new DateTime(2023, 06, 01, 18, 00, 00);
         var overtimeEnd = new DateTime(2023, 06, 01, 20, 00, 00);
 
-        var overtimePeriodSetting01 = new OvertimePeriodSetting(new Period(overtimeStart, "06:00", "17:00"), 0, 0);
-        var overtimePeriodSetting02 = new OvertimePeriodSetting(new Period(overtimeStart, "17:00", "06:00"), 0, 0);
+        var overtimePeriodSetting01 = new OvertimePeriodSetting(new Period(overtimeStart, "06:00", "17:00"), new OvertimeRate(0, 0));
+        var overtimePeriodSetting02 = new OvertimePeriodSetting(new Period(overtimeStart, "17:00", "06:00"), new OvertimeRate(0, 0));
 
         var overtimePeriodSettings = new OvertimePeriodSettings(overtimePeriodSetting01, overtimePeriodSetting02);
 
@@ -135,8 +135,8 @@ public class OvertimePeriodSettingsTests
         var overtimeStart = new DateTime(2023, 06, 01, 22, 00, 00);
         var overtimeEnd = new DateTime(2023, 06, 02, 01, 00, 00);
 
-        var overtimePeriodSetting01 = new OvertimePeriodSetting(new Period(overtimeStart, "06:00", "17:00"), 0, 0);
-        var overtimePeriodSetting02 = new OvertimePeriodSetting(new Period(overtimeStart, "17:00", "06:00"), 0, 0);
+        var overtimePeriodSetting01 = new OvertimePeriodSetting(new Period(overtimeStart, "06:00", "17:00"), new OvertimeRate(0, 0));
+        var overtimePeriodSetting02 = new OvertimePeriodSetting(new Period(overtimeStart, "17:00", "06:00"), new OvertimeRate(0, 0));
 
         var overtimePeriodSettings = new OvertimePeriodSettings(overtimePeriodSetting01, overtimePeriodSetting02);
 
@@ -172,8 +172,8 @@ public class OvertimePeriodSettingsTests
         var overtimeStart = new DateTime(2023, 06, 01, 16, 00, 00);
         var overtimeEnd = new DateTime(2023, 06, 01, 22, 00, 00);
 
-        var overtimePeriodSetting01 = new OvertimePeriodSetting(new Period(overtimeStart, "06:00", "17:00"), 0, 0);
-        var overtimePeriodSetting02 = new OvertimePeriodSetting(new Period(overtimeStart, "17:00", "06:00"), 0, 0);
+        var overtimePeriodSetting01 = new OvertimePeriodSetting(new Period(overtimeStart, "06:00", "17:00"), new OvertimeRate(0, 0));
+        var overtimePeriodSetting02 = new OvertimePeriodSetting(new Period(overtimeStart, "17:00", "06:00"), new OvertimeRate(0, 0));
 
         var overtimePeriodSettings = new OvertimePeriodSettings(overtimePeriodSetting01, overtimePeriodSetting02);
 
@@ -208,8 +208,8 @@ public class OvertimePeriodSettingsTests
         var overtimeStart = new DateTime(2023, 06, 01, 16, 00, 00);
         var overtimeEnd = new DateTime(2023, 06, 02, 01, 00, 00);
 
-        var overtimePeriodSetting01 = new OvertimePeriodSetting(new Period(overtimeStart, "06:00", "17:00"), 0, 0);
-        var overtimePeriodSetting02 = new OvertimePeriodSetting(new Period(overtimeStart, "17:00", "06:00"), 0, 0);
+        var overtimePeriodSetting01 = new OvertimePeriodSetting(new Period(overtimeStart, "06:00", "17:00"), new OvertimeRate(0, 0));
+        var overtimePeriodSetting02 = new OvertimePeriodSetting(new Period(overtimeStart, "17:00", "06:00"), new OvertimeRate(0, 0));
 
         var overtimePeriodSettings = new OvertimePeriodSettings(overtimePeriodSetting01, overtimePeriodSetting02);
 

@@ -2,12 +2,12 @@ namespace OvertimeHour;
 
 public class OvertimePeriodSetting
 {
-    public OvertimePeriodSetting(Period period, int dayRate, int nightRate, int nightRateWithDayOvertime = 0)
+    public OvertimePeriodSetting(Period period, OvertimeRate overtimeRate)
     {
         Period = period;
-        DayRate = dayRate;
-        NightRate = nightRate;
-        NightRateWithDayOvertime = nightRateWithDayOvertime;
+        DayRate = overtimeRate.DayRate;
+        NightRate = overtimeRate.NightRate;
+        NightRateWithDayOvertime = overtimeRate.NightRateWithDayOvertime;
     }
 
     public Period Period { get; }
