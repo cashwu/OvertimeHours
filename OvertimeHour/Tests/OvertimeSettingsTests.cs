@@ -146,7 +146,7 @@ public class OvertimeSettingsTests
     /// 22 - 01
     ///
     /// split overtime
-    /// 22 - 00 (200, 210), 00 - 01 (200, 210)
+    /// 22 - 00 (200), 00 - 01 (200)
     /// </summary>
     [Fact]
     public void split_period_have_1_overlap_cross_day()
@@ -197,7 +197,7 @@ public class OvertimeSettingsTests
     /// 16 - 22
     ///
     /// split overtime
-    /// 16 - 17 (150), 17 - 22 (200, 210)
+    /// 16 - 17 (150), 17 - 22 (210)
     /// </summary>
     [Fact]
     public void split_period_have_2_overlap_not_cross_day()
@@ -230,7 +230,7 @@ public class OvertimeSettingsTests
             {
                 Start = firstSettingEnd,
                 End = overtimeEnd,
-                Rate = 200,
+                Rate = 210,
                 Type = EnumRateType.Night
             }
         });
@@ -238,7 +238,7 @@ public class OvertimeSettingsTests
 
     /// <summary>
     /// setting
-    /// 06 - 17, 17 - 06
+    /// 06 - 17 (150), 17 - 06 (200, 210)
     ///
     /// split setting
     /// 06 - 17, 17 - 00, 00 - 06
@@ -247,7 +247,7 @@ public class OvertimeSettingsTests
     /// 16 - 01
     ///
     /// split overtime
-    /// 16 - 17, 17 - 00, 00 - 01
+    /// 16 - 17 (150), 17 - 00 (210), 00 - 01 (210)
     /// </summary>
     [Fact]
     public void split_period_have_2_overlap_cross_day()
@@ -282,14 +282,14 @@ public class OvertimeSettingsTests
             {
                 Start = firstSettingEnd,
                 End = crossDay,
-                Rate = 200,
+                Rate = 210,
                 Type = EnumRateType.Night
             },
             new()
             {
                 Start = crossDay,
                 End = overtimeEnd,
-                Rate = 200,
+                Rate = 210,
                 Type = EnumRateType.Night
             }
         });

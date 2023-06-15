@@ -36,9 +36,13 @@ public class OvertimeSettings : List<OvertimeSetting>
                 continue;
             }
 
+            var rateNight = result.Any(a => a.Type == EnumRateType.Day)
+                                ? overtimeSetting.Rate.NightWithDayOvertime
+                                : overtimeSetting.Rate.Night;
+
             var rate = overtimeSetting.Rate.Type == EnumRateType.Day
                            ? overtimeSetting.Rate.Day
-                           : overtimeSetting.Rate.Night;
+                           : rateNight;
 
             result.Add(new Overtime
             {
