@@ -25,14 +25,18 @@ public class OvertimeSettings : List<OvertimeSetting>
 
     public IEnumerable<(Period period, Rate Rate)> SplitPeriod(Period overTimePeriod)
     {
+        var result = new List<(Period period, Rate Rate)>();
+
         foreach (var overtimeSetting in this)
         {
             var period = overtimeSetting.Period.OverlapPeriod(overTimePeriod);
 
             if (period != null)
             {
-                yield return (period, overtimeSetting.Rate);
+                result.Add(new(period, overtimeSetting.Rate));
             }
         }
+
+        return result;
     }
 }
