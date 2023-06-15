@@ -10,11 +10,11 @@ public class OvertimePeriodSettings : List<OvertimePeriodSetting>
             {
                 var period = new Period(overtimePeriodSetting.Period.BaseDate, overtimePeriodSetting.Period.OriginStart, "00:00");
 
-                Add(new OvertimePeriodSetting(period, new OvertimeRate(overtimePeriodSetting.DayRate, overtimePeriodSetting.NightRate, overtimePeriodSetting.NightRateWithDayOvertime)));
+                Add(new OvertimePeriodSetting(period, overtimePeriodSetting.OvertimeRate));
 
                 var crossDayPeriod = new Period(overtimePeriodSetting.Period.BaseDate.AddDays(1), "00:00", overtimePeriodSetting.Period.OriginEnd);
 
-                Add(new OvertimePeriodSetting(crossDayPeriod, new OvertimeRate(overtimePeriodSetting.DayRate, overtimePeriodSetting.NightRate, overtimePeriodSetting.NightRateWithDayOvertime)));
+                Add(new OvertimePeriodSetting(crossDayPeriod, overtimePeriodSetting.OvertimeRate));
             }
             else
             {

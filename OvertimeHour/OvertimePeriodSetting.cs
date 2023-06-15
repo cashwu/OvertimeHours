@@ -5,16 +5,10 @@ public class OvertimePeriodSetting
     public OvertimePeriodSetting(Period period, OvertimeRate overtimeRate)
     {
         Period = period;
-        DayRate = overtimeRate.DayRate;
-        NightRate = overtimeRate.NightRate;
-        NightRateWithDayOvertime = overtimeRate.NightRateWithDayOvertime;
+        OvertimeRate = overtimeRate;
     }
 
     public Period Period { get; }
 
-    public int DayRate { get; }
-
-    public int NightRate { get; }
-
-    public int NightRateWithDayOvertime { get; }
+    public OvertimeRate OvertimeRate { get; }
 }
