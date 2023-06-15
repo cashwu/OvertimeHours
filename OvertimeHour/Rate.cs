@@ -1,24 +1,24 @@
 namespace OvertimeHour;
 
-public class OvertimeRate
+public class Rate
 {
-    public OvertimeRate(int day)
+    public Rate(int day)
     {
         Day = day;
         Night = 0;
         NightWithDayOvertime = 0;
-        Type = EnumOverTimeRateType.Day;
+        Type = EnumRateType.Day;
     }
 
-    public OvertimeRate(int night, int nightWithDayOvertime)
+    public Rate(int night, int nightWithDayOvertime)
     {
         Day = 0;
         Night = night;
         NightWithDayOvertime = nightWithDayOvertime;
-        Type = EnumOverTimeRateType.Night;
+        Type = EnumRateType.Night;
     }
 
-    public OvertimeRate(int day, int night, int nightWithDayOvertime, EnumOverTimeRateType type)
+    public Rate(int day, int night, int nightWithDayOvertime, EnumRateType type)
     {
         Day = day;
         Night = night;
@@ -26,7 +26,7 @@ public class OvertimeRate
         Type = type;
     }
 
-    public EnumOverTimeRateType Type { get; set; }
+    public EnumRateType Type { get; set; }
 
     public int Day { get; private set; }
 

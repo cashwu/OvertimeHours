@@ -1,6 +1,6 @@
 namespace OvertimeHour;
 
-public enum EnumOverTimeRateType
+public enum EnumRateType
 {
     Day = 1,
 
