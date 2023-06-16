@@ -103,31 +103,31 @@ public class OvertimeSettingsGetRealOvertimeTests
     [Fact(Skip = "skip")]
     public void night_overlap_cross_day()
     {
-        var overtimeStart = new DateTime(2023, 06, 01, 22, 00, 00);
-        var overtimeEnd = new DateTime(2023, 06, 02, 01, 00, 00);
-        var overTimePeriod = new Period(overtimeStart, overtimeEnd);
-
-        var overtimeSettings = GivenOvertimeSettings(overtimeStart.Date);
-
-        var overTimePeriods = overtimeSettings.CreateOvertime(overTimePeriod).ToList();
-
-        overTimePeriods.Should().BeEquivalentTo(new List<Overtime>
-        {
-            new()
-            {
-                Start = overtimeStart,
-                End = new DateTime(2023, 06, 02, 00, 00, 00),
-                Rate = 200,
-                Type = EnumRateType.Night
-            },
-            new()
-            {
-                Start = new DateTime(2023, 06, 02, 00, 00, 00),
-                End = overtimeEnd,
-                Rate = 200,
-                Type = EnumRateType.Night
-            }
-        });
+        // var overtimeStart = new DateTime(2023, 06, 01, 22, 00, 00);
+        // var overtimeEnd = new DateTime(2023, 06, 02, 01, 00, 00);
+        // var overTimePeriod = new Period(overtimeStart, overtimeEnd);
+        //
+        // var overtimeSettings = GivenOvertimeSettings(overtimeStart.Date);
+        //
+        // var overTimePeriods = overtimeSettings.CreateOvertime(overTimePeriod).ToList();
+        //
+        // overTimePeriods.Should().BeEquivalentTo(new List<Overtime>
+        // {
+        //     new()
+        //     {
+        //         Start = overtimeStart,
+        //         End = new DateTime(2023, 06, 02, 00, 00, 00),
+        //         Rate = 200,
+        //         Type = EnumRateType.Night
+        //     },
+        //     new()
+        //     {
+        //         Start = new DateTime(2023, 06, 02, 00, 00, 00),
+        //         End = overtimeEnd,
+        //         Rate = 200,
+        //         Type = EnumRateType.Night
+        //     }
+        // });
     }
 
     /// <summary>
