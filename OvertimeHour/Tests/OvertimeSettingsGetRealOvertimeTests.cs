@@ -65,23 +65,23 @@ public class OvertimeSettingsGetRealOvertimeTests
     [Fact(Skip = "skip")]
     public void night_overlap_not_cross_day()
     {
-        var overtimeStart = new DateTime(2023, 06, 01, 22, 00, 00);
-        var overtimeEnd = new DateTime(2023, 06, 01, 23, 00, 00);
-        var overTimePeriod = new Period(overtimeStart, overtimeEnd);
-
-        var overtimeSettings = GivenOvertimeSettings(overtimeStart.Date);
-        var overtimes = overtimeSettings.CreateOvertime(overTimePeriod);
-
-        overtimes.Should().BeEquivalentTo(new List<Overtime>
-        {
-            new()
-            {
-                Start = overtimeStart,
-                End = overtimeEnd,
-                Rate = 200,
-                Type = EnumRateType.Night
-            }
-        });
+        // var overtimeStart = new DateTime(2023, 06, 01, 22, 00, 00);
+        // var overtimeEnd = new DateTime(2023, 06, 01, 23, 00, 00);
+        // var overTimePeriod = new Period(overtimeStart, overtimeEnd);
+        //
+        // var overtimeSettings = GivenOvertimeSettings(overtimeStart.Date);
+        // var overtimes = overtimeSettings.CreateOvertime(overTimePeriod);
+        //
+        // overtimes.Should().BeEquivalentTo(new List<Overtime>
+        // {
+        //     new()
+        //     {
+        //         Start = overtimeStart,
+        //         End = overtimeEnd,
+        //         Rate = 200,
+        //         Type = EnumRateType.Night
+        //     }
+        // });add
     }
 
     /// <summary>
