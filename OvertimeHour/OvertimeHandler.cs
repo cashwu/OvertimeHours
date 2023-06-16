@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using OvertimeHour.Enums;
 
 namespace OvertimeHour;
@@ -13,19 +14,49 @@ public class OvertimeHandler
         _calenderSettings = calenderSettings;
     }
 
+    [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
     public List<Overtime> Handler(OvertimeForm overtimeForm)
     {
         var result = new List<Overtime>();
 
-        var overtime = new Overtime
-        {
-            Start = new DateTime(2023, 06, 01, 18, 00, 00),
-            End = new DateTime(2023, 06, 01, 20, 00, 00),
-            Rate = 150,
-            Type = EnumRateType.Day
-        };
+        // get overtime day type
+        var calenderSetting = _calenderSettings.FirstOrDefault(a => a.Date == overtimeForm.Period.Start.Date);
 
-        result.Add(overtime);
+        // get overtime setting by type
+
+        var calenderSettingType = calenderSetting.Type;
+        EnumOvertimeSettingType overtimeSettingType = 0;
+
+        if (calenderSettingType == EnumCalenderType.Workday)
+        {
+            overtimeSettingType = EnumOvertimeSettingType.Workday;
+        }
+
+        var overtimeSetting = _overtimeSettings.FirstOrDefault(a => a.Type == overtimeSettingType);
+
+        // set base date
+        overtimeSetting.SetBaseDate(overtimeForm.Period.Start.Date);
+
+        // split setting
+
+        // how ??
+
+        // get real overtime
+
+        var period = overtimeSetting.DaySetting.period.OverlapPeriod(overtimeForm.Period);
+
+        if (period != null)
+        {
+            // var anyDayOvertime = result.Any(a => a.Type == EnumRateType.Day);
+
+            result.Add(new Overtime
+            {
+                Start = period.Start,
+                End = period.End,
+                Rate = overtimeSetting.DaySetting.rate.Day,
+                Type = overtimeSetting.DaySetting.rate.Type
+            });
+        }
 
         return result;
     }

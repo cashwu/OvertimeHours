@@ -12,7 +12,7 @@ public class OvertimeFormTests
         var overtimeForm = new OvertimeForm(new DateTime(2023, 06, 01, 18, 00, 00),
                                             new DateTime(2023, 06, 01, 20, 00, 00));
 
-        overtimeForm.Start.Should().Be(new DateTime(2023, 06, 01, 18, 00, 00));
-        overtimeForm.End.Should().Be(new DateTime(2023, 06, 01, 20, 00, 00));
+        overtimeForm.Period.Start.Should().Be(new DateTime(2023, 06, 01, 18, 00, 00));
+        overtimeForm.Period.End.Should().Be(new DateTime(2023, 06, 01, 20, 00, 00));
     }
 }
