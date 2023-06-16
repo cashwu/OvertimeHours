@@ -1,5 +1,4 @@
 using System.Diagnostics.CodeAnalysis;
-using OvertimeHour.Enums;
 
 namespace OvertimeHour;
 
@@ -23,15 +22,7 @@ public class OvertimeHandler
         var calenderSetting = _calenderSettings.FirstOrDefault(a => a.Date == overtimeForm.Period.Start.Date);
 
         // get overtime setting by type
-
-        var calenderSettingType = calenderSetting.Type;
-        EnumOvertimeSettingType overtimeSettingType = 0;
-
-        if (calenderSettingType == EnumCalenderType.Workday)
-        {
-            overtimeSettingType = EnumOvertimeSettingType.Workday;
-        }
-
+        var overtimeSettingType = calenderSetting.ToOvertimeSettingType();
         var overtimeSetting = _overtimeSettings.FirstOrDefault(a => a.Type == overtimeSettingType);
 
         // set base date

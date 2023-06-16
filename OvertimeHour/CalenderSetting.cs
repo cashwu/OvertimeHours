@@ -13,4 +13,16 @@ public class CalenderSetting
     public DateTime Date { get; }
 
     public EnumCalenderType Type { get; }
+
+    public EnumOvertimeSettingType ToOvertimeSettingType()
+    {
+        EnumOvertimeSettingType overtimeSettingType = 0;
+
+        if (Type == EnumCalenderType.Workday)
+        {
+            overtimeSettingType = EnumOvertimeSettingType.Workday;
+        }
+
+        return overtimeSettingType;
+    }
 }
