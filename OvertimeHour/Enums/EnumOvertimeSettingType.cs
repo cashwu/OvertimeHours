@@ -1,4 +1,4 @@
-namespace OvertimeHour;
+namespace OvertimeHour.Enums;
 
 public enum EnumOvertimeSettingType
 {

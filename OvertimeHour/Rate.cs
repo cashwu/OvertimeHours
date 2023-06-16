@@ -1,3 +1,5 @@
+using OvertimeHour.Enums;
+
 namespace OvertimeHour;
 
 public class Rate

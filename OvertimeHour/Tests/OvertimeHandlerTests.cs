@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using OvertimeHour.Enums;
 
 namespace OvertimeHour.Tests;
 

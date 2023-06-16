@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
+using OvertimeHour.Enums;
 
 namespace OvertimeHour.Tests;
 
