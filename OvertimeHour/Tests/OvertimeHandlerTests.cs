@@ -34,11 +34,11 @@ public class OvertimeHandlerTests
     {
         var workDaySetting = new OvertimeSetting((new Period("06:00", "22:00"), new Rate(150)),
                                                  (new Period("22:00", "06:00"), new Rate(200, 210)),
-                                                 EnumSettingType.Workday);
+                                                 EnumOvertimeSettingType.Workday);
 
         var holidaySetting = new OvertimeSetting((new Period("06:00", "22:00"), new Rate(300)),
                                                  (new Period("22:00", "06:00"), new Rate(350, 0)),
-                                                 EnumSettingType.Holiday);
+                                                 EnumOvertimeSettingType.Holiday);
 
         return new OvertimeSettings(workDaySetting, holidaySetting);
     }

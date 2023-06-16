@@ -1,6 +1,6 @@
 namespace OvertimeHour;
 
-public enum EnumSettingType
+public enum EnumOvertimeSettingType
 {
     Workday = 1,
     Holiday = 2
