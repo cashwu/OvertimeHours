@@ -12,8 +12,17 @@ public class OvertimeHandlerTests
         _overtimeHandler = new OvertimeHandler(GivenOvertimeSettings());
     }
 
+    /// <summary>
+    /// workday
+    /// 
+    /// overtime
+    /// 18 - 20
+    ///
+    /// real overtime rate
+    /// 18 - 20 (150)
+    /// </summary>
     [Fact]
-    public void handler()
+    public void workday_day_overlap_not_cross_day()
     {
         var overtimeForm = new OvertimeForm(new DateTime(2023, 06, 01, 18, 00, 00),
                                             new DateTime(2023, 06, 01, 20, 00, 00));
