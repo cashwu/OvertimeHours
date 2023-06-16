@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using FluentAssertions;
 using OvertimeHour.Enums;
 
 namespace OvertimeHour.Tests;
@@ -28,7 +29,18 @@ public class OvertimeHandlerTests
         var overtimeForm = new OvertimeForm(new DateTime(2023, 06, 01, 18, 00, 00),
                                             new DateTime(2023, 06, 01, 20, 00, 00));
 
-        _overtimeHandler.Handler(overtimeForm);
+        var overtimes = _overtimeHandler.Handler(overtimeForm);
+
+        overtimes.Should().BeEquivalentTo(new List<Overtime>
+        {
+            new()
+            {
+                Start = new DateTime(2023, 06, 01, 18, 00, 00),
+                End = new DateTime(2023, 06, 01, 20, 00, 00),
+                Rate = 150,
+                Type = EnumRateType.Day
+            }
+        });
     }
 
     private static CalenderSettings GivenCalenderSettings()
