@@ -40,13 +40,15 @@ public class OvertimeSetting
                    : rateNight;
     }
 
-    public void SetBaseDate(DateTime baseDate)
+    public OvertimeSetting SetBaseDate(DateTime baseDate)
     {
         var dayPeriod = new Period(baseDate, DaySetting.period.OriginStart, DaySetting.period.OriginEnd);
         DaySetting = (dayPeriod, DaySetting.rate);
 
         var nightPeriod = new Period(baseDate, NightSetting.period.OriginStart, NightSetting.period.OriginEnd);
         NightSetting = (nightPeriod, NightSetting.rate);
+
+        return new OvertimeSetting(DaySetting, NightSetting, Type);
     }
 
     public OvertimeSettings SplitSetting()
