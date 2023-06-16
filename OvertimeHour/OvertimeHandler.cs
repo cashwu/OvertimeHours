@@ -30,31 +30,27 @@ public class OvertimeHandler
         overtimeSetting.SetBaseDate(overtimeForm.Period.Start.Date);
 
         // split setting
-        var daySetting = new OvertimeSetting(overtimeSetting.DaySetting.period, overtimeSetting.DaySetting.rate);
-        var nightSetting = new OvertimeSetting(overtimeSetting.NightSetting.period, overtimeSetting.NightSetting.rate);
-        var newOvertimeSetting = new OvertimeSettings(daySetting, nightSetting);
+        var newOvertimeSetting = overtimeSetting.SplitSetting();
 
         // get real overtime
+        foreach (var setting in newOvertimeSetting)
         {
-            foreach (var setting in newOvertimeSetting)
+            var period = setting.Period.OverlapPeriod(overtimeForm.Period);
+
+            if (period == null)
             {
-                var period = setting.Period.OverlapPeriod(overtimeForm.Period);
-
-                if (period == null)
-                {
-                    continue;
-                }
-
-                var anyDayOvertime = result.Any(a => a.Type == EnumRateType.Day);
-
-                result.Add(new Overtime
-                {
-                    Start = period.Start,
-                    End = period.End,
-                    Rate = setting.RealRate(anyDayOvertime),
-                    Type = setting.Rate.Type
-                });
+                continue;
             }
+
+            var anyDayOvertime = result.Any(a => a.Type == EnumRateType.Day);
+
+            result.Add(new Overtime
+            {
+                Start = period.Start,
+                End = period.End,
+                Rate = setting.RealRate(anyDayOvertime),
+                Type = setting.Rate.Type
+            });
         }
 
         return result;

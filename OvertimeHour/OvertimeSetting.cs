@@ -49,8 +49,11 @@ public class OvertimeSetting
         NightSetting = (nightPeriod, NightSetting.rate);
     }
 
-    public void SplitSetting()
+    public OvertimeSettings SplitSetting()
     {
-        throw new NotImplementedException();
+        var daySetting = new OvertimeSetting(DaySetting.period, DaySetting.rate);
+        var nightSetting = new OvertimeSetting(NightSetting.period, NightSetting.rate);
+
+        return new OvertimeSettings(daySetting, nightSetting);
     }
 }
