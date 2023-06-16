@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using OvertimeHour.Enums;
 
 namespace OvertimeHour;
 
@@ -29,24 +30,31 @@ public class OvertimeHandler
         overtimeSetting.SetBaseDate(overtimeForm.Period.Start.Date);
 
         // split setting
-
-        // how ??
+        var daySetting = new OvertimeSetting(overtimeSetting.DaySetting.period, overtimeSetting.DaySetting.rate);
+        var nightSetting = new OvertimeSetting(overtimeSetting.NightSetting.period, overtimeSetting.NightSetting.rate);
+        var newOvertimeSetting = new OvertimeSettings(daySetting, nightSetting);
 
         // get real overtime
-
-        var period = overtimeSetting.DaySetting.period.OverlapPeriod(overtimeForm.Period);
-
-        if (period != null)
         {
-            // var anyDayOvertime = result.Any(a => a.Type == EnumRateType.Day);
-
-            result.Add(new Overtime
+            foreach (var setting in newOvertimeSetting)
             {
-                Start = period.Start,
-                End = period.End,
-                Rate = overtimeSetting.DaySetting.rate.Day,
-                Type = overtimeSetting.DaySetting.rate.Type
-            });
+                var period = setting.Period.OverlapPeriod(overtimeForm.Period);
+
+                if (period == null)
+                {
+                    continue;
+                }
+
+                var anyDayOvertime = result.Any(a => a.Type == EnumRateType.Day);
+
+                result.Add(new Overtime
+                {
+                    Start = period.Start,
+                    End = period.End,
+                    Rate = setting.RealRate(anyDayOvertime),
+                    Type = setting.Rate.Type
+                });
+            }
         }
 
         return result;
