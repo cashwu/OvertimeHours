@@ -26,6 +26,12 @@ public class Period
         End = end;
     }
 
+    public Period(string start, string end)
+    {
+        OriginStart = start;
+        OriginEnd = end;
+    }
+
     public DateTime BaseDate { get; set; }
 
     public string OriginStart { get; set; }

@@ -138,4 +138,16 @@ public class PeriodTests
         period.OriginEnd.Should().Be("02:00");
         period.BaseDate.Should().Be(start);
     }
+
+    [Fact]
+    public void ctor_2_date_string()
+    {
+        var period = new Period("06:00", "22:00");
+
+        period.OriginStart.Should().Be("06:00");
+        period.OriginEnd.Should().Be("22:00");
+        period.Start.Should().Be(default);
+        period.End.Should().Be(default);
+        period.BaseDate.Should().Be(default);
+    }
 }
