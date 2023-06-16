@@ -2,5 +2,6 @@ namespace OvertimeHour;
 
 public enum EnumSettingType
 {
-    WorkDay
+    Workday = 1,
+    Holiday = 2
 }

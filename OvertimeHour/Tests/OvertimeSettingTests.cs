@@ -29,10 +29,10 @@ public class OvertimeSettingTests
 
         var overtimeSetting = new OvertimeSetting((dayPeriod, dayOvertimeRate),
                                                   (nightPeriod, nightOvertimeRate),
-                                                  EnumSettingType.WorkDay);
+                                                  EnumSettingType.Workday);
 
         overtimeSetting.DaySetting.Should().BeEquivalentTo((dayPeriod, dayOvertimeRate));
         overtimeSetting.NightSetting.Should().BeEquivalentTo((nightPeriod, nightOvertimeRate));
-        overtimeSetting.Type.Should().Be(EnumSettingType.WorkDay);
+        overtimeSetting.Type.Should().Be(EnumSettingType.Workday);
     }
 }
