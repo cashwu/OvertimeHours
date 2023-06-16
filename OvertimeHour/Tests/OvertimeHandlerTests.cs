@@ -10,7 +10,7 @@ public class OvertimeHandlerTests
 
     public OvertimeHandlerTests()
     {
-        _overtimeHandler = new OvertimeHandler(GivenOvertimeSettings());
+        _overtimeHandler = new OvertimeHandler(GivenOvertimeSettings(), GivenCalenderSettings());
     }
 
     /// <summary>
@@ -29,6 +29,12 @@ public class OvertimeHandlerTests
                                             new DateTime(2023, 06, 01, 20, 00, 00));
 
         _overtimeHandler.Handler(overtimeForm);
+    }
+
+    private static CalenderSettings GivenCalenderSettings()
+    {
+        return new CalenderSettings(new CalenderSetting(new DateTime(2023, 06, 01), EnumCalenderType.Workday),
+                                    new CalenderSetting(new DateTime(2023, 06, 02), EnumCalenderType.Workday));
     }
 
     private static OvertimeSettings GivenOvertimeSettings()
