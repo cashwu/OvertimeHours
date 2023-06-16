@@ -9,9 +9,11 @@ public class CalenderSettingTests
     [Fact]
     public void ctor()
     {
-        var calenderSetting = new CalenderSetting(new DateTime(2023, 06, 01), EnumCalenderType.Workday);
+        var setting0602 = new CalenderSetting(new DateTime(2023, 06, 01), EnumCalenderType.Workday);
+        var setting0601 = new CalenderSetting(new DateTime(2023, 06, 02), EnumCalenderType.Workday);
 
-        calenderSetting.Date.Should().Be(new DateTime(2023, 06, 01));
-        calenderSetting.Type.Should().Be(EnumCalenderType.Workday);
+        var calenderSettings = new CalenderSettings(setting0601, setting0602);
+
+        calenderSettings.Count.Should().Be(2);
     }
 }
