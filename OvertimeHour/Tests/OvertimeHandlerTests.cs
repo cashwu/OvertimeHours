@@ -1,14 +1,27 @@
 using System.Diagnostics.CodeAnalysis;
-using FluentAssertions;
 
 namespace OvertimeHour.Tests;
 
-[SuppressMessage("ReSharper", "CollectionNeverUpdated.Local")]
 [SuppressMessage("ReSharper", "InconsistentNaming")]
-public class OvertimeSettingsTests
+public class OvertimeHandlerTests
 {
+    private readonly OvertimeHandler _overtimeHandler;
+
+    public OvertimeHandlerTests()
+    {
+        _overtimeHandler = new OvertimeHandler(GivenOvertimeSettings());
+    }
+
     [Fact]
-    public void ctor()
+    public void handler()
+    {
+        var overtimeForm = new OvertimeForm(new DateTime(2023, 06, 01, 18, 00, 00),
+                                            new DateTime(2023, 06, 01, 20, 00, 00));
+
+        _overtimeHandler.Handler(overtimeForm);
+    }
+
+    private static OvertimeSettings GivenOvertimeSettings()
     {
         var workDaySetting = new OvertimeSetting((new Period("06:00", "22:00"), new Rate(150)),
                                                  (new Period("22:00", "06:00"), new Rate(200, 210)),
@@ -18,8 +31,6 @@ public class OvertimeSettingsTests
                                                  (new Period("22:00", "06:00"), new Rate(350, 0)),
                                                  EnumSettingType.Holiday);
 
-        var overtimeSettings = new OvertimeSettings(workDaySetting, holidaySetting);
-
-        overtimeSettings.Count.Should().Be(2);
+        return new OvertimeSettings(workDaySetting, holidaySetting);
     }
 }
