@@ -8,6 +8,21 @@ public class OvertimeSetting
         Rate = rate;
     }
 
+    public OvertimeSetting((Period period, Rate rate) daySetting,
+                           (Period period, Rate rate) nightSetting,
+                           EnumSettingType type)
+    {
+        DaySetting = daySetting;
+        NightSetting = nightSetting;
+        Type = type;
+    }
+
+    public (Period period, Rate rate) DaySetting { get; }
+
+    public (Period period, Rate rate) NightSetting { get; }
+
+    public EnumSettingType Type { get; }
+
     public Period Period { get; }
 
     public Rate Rate { get; }

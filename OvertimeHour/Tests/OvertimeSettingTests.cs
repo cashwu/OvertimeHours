@@ -18,4 +18,21 @@ public class OvertimeSettingTests
         overtimeSetting.Period.Should().BeEquivalentTo(period);
         overtimeSetting.Rate.Should().BeEquivalentTo(overtimeRate);
     }
+
+    [Fact]
+    public void ctor_day_night_type()
+    {
+        var dayPeriod = new Period("06:00", "22:00");
+        var dayOvertimeRate = new Rate(150);
+        var nightPeriod = new Period("22:00", "06:00");
+        var nightOvertimeRate = new Rate(200, 210);
+
+        var overtimeSetting = new OvertimeSetting((dayPeriod, dayOvertimeRate),
+                                                  (nightPeriod, nightOvertimeRate),
+                                                  EnumSettingType.WorkDay);
+
+        overtimeSetting.DaySetting.Should().BeEquivalentTo((dayPeriod, dayOvertimeRate));
+        overtimeSetting.NightSetting.Should().BeEquivalentTo((nightPeriod, nightOvertimeRate));
+        overtimeSetting.Type.Should().Be(EnumSettingType.WorkDay);
+    }
 }
