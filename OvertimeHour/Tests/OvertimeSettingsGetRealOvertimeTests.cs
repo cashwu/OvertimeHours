@@ -5,7 +5,7 @@ namespace OvertimeHour.Tests;
 
 [SuppressMessage("ReSharper", "CollectionNeverUpdated.Local")]
 [SuppressMessage("ReSharper", "InconsistentNaming")]
-public class OvertimeSettingsTests
+public class OvertimeSettingsGetRealOvertimeTests
 {
     /// <summary>
     /// setting
