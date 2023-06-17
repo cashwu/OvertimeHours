@@ -31,7 +31,7 @@ public class OvertimeHandlerTests
 
         var overtimes = _overtimeHandler.Handler(overtimeForm);
 
-        overtimes.Should().BeEquivalentTo(new List<Overtime>
+        overtimes.Should().BeEquivalentTo(new List<OvertimePeriod>
         {
             new()
             {
@@ -60,7 +60,7 @@ public class OvertimeHandlerTests
 
         var overtimes = _overtimeHandler.Handler(overtimeForm);
 
-        overtimes.Should().BeEquivalentTo(new List<Overtime>
+        overtimes.Should().BeEquivalentTo(new List<OvertimePeriod>
         {
             new()
             {
@@ -89,7 +89,7 @@ public class OvertimeHandlerTests
 
         var overtimes = _overtimeHandler.Handler(overtimeForm);
 
-        overtimes.Should().BeEquivalentTo(new List<Overtime>
+        overtimes.Should().BeEquivalentTo(new List<OvertimePeriod>
         {
             new()
             {
@@ -125,7 +125,7 @@ public class OvertimeHandlerTests
 
         var overtimes = _overtimeHandler.Handler(overtimeForm);
 
-        overtimes.Should().BeEquivalentTo(new List<Overtime>
+        overtimes.Should().BeEquivalentTo(new List<OvertimePeriod>
         {
             new()
             {
@@ -161,7 +161,7 @@ public class OvertimeHandlerTests
 
         var overtimes = _overtimeHandler.Handler(overtimeForm);
 
-        overtimes.Should().BeEquivalentTo(new List<Overtime>
+        overtimes.Should().BeEquivalentTo(new List<OvertimePeriod>
         {
             new()
             {

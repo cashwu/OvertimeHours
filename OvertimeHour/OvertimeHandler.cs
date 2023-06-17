@@ -15,9 +15,9 @@ public class OvertimeHandler
     }
 
     [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
-    public List<Overtime> Handler(OvertimeForm overtimeForm)
+    public List<OvertimePeriod> Handler(OvertimeForm overtimeForm)
     {
-        var result = new List<Overtime>();
+        var result = new List<OvertimePeriod>();
 
         // get overtime day type
         var calenderSetting01 = _calenderSettings.FirstOrDefault(a => a.Date == overtimeForm.Period.Start.Date);
@@ -67,7 +67,7 @@ public class OvertimeHandler
 
             var anyDayOvertime = result.Any(a => a.Type == EnumRateType.Day);
 
-            result.Add(new Overtime
+            result.Add(new OvertimePeriod
             {
                 Start = period.Start,
                 End = period.End,

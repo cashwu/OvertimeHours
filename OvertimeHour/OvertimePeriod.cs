@@ -2,7 +2,7 @@ using OvertimeHour.Enums;
 
 namespace OvertimeHour;
 
-public class Overtime
+public class OvertimePeriod
 {
     public DateTime Start { get; set; }
 
