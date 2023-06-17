@@ -196,7 +196,7 @@ public class OvertimeHandlerTests
     /// real overtime rate
     /// 22 - 00 (200), 00 - 01 (200)
     /// </summary>
-    [Fact(Skip = "skip")]
+    [Fact]
     public void workday_night_overlap_cross_holiday()
     {
         var overtimeForm = new OvertimeForm(new DateTime(2023, 06, 02, 22, 00, 00),

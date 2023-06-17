@@ -59,16 +59,31 @@ public class OvertimeHandler
 
         var endDateCalenderSetting = _calenderSettings.FirstOrDefault(a => a.Date == overtimeForm.Period.End.Date);
 
-        var overtimeSettingForEndDate = OvertimeSetting(overtimeForm.Period.End.Date, endDateCalenderSetting.OvertimeSettingType);
-
-        // cross type
-        if (overtimeSettingForStartDate[0].Type != overtimeSettingForEndDate[0].Type)
+        // cross day and difference type 
+        if (startDateCalenderSetting.Type != endDateCalenderSetting.Type)
         {
             // // remove cross day data
-            // overtimeSettingForStartDate.RemoveAll(a => a.Period.Start.Date == overtimeForm.Period.Start.Date);
-        }
+            overtimeSettingForStartDate.RemoveAll(a => a.Period.Start.Date == overtimeForm.Period.End.Date);
 
-        return overtimeSettingForStartDate.Concat(overtimeSettingForEndDate);
+            var overtimeSettingForEndDate = OvertimeSetting(overtimeForm.Period.End.Date, endDateCalenderSetting.OvertimeSettingType);
+
+            overtimeSettingForEndDate.ForEach(setting =>
+            {
+                if (setting.Period.Start.Date == overtimeForm.Period.End.Date.AddDays(1))
+                {
+                    setting.Period.Start = setting.Period.Start.AddDays(-1);
+                    setting.Period.End = setting.Period.End.AddDays(-1);
+                }
+            });
+
+            return overtimeSettingForStartDate.Concat(overtimeSettingForEndDate);
+        }
+        else
+        {
+            var overtimeSettingForEndDate = OvertimeSetting(overtimeForm.Period.End.Date, endDateCalenderSetting.OvertimeSettingType);
+
+            return overtimeSettingForStartDate.Concat(overtimeSettingForEndDate);
+        }
     }
 
     [SuppressMessage("ReSharper", "PossibleNullReferenceException")]

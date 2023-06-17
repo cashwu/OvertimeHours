@@ -38,9 +38,9 @@ public class Period
 
     public string OriginEnd { get; set; }
 
-    public DateTime Start { get; }
+    public DateTime Start { get; set; }
 
-    public DateTime End { get; }
+    public DateTime End { get; set; }
 
     public bool IsSettingCrossDay => End <= Start;
 
@@ -53,10 +53,10 @@ public class Period
             return default;
         }
 
-        var start = Start > another.Start ? OriginStart : another.OriginStart;
-        var end = End < another.End ? OriginEnd : another.OriginEnd;
+        var start = Start > another.Start ? Start : another.Start;
+        var end = End < another.End ? End : another.End;
 
-        return new Period(BaseDate, start, end);
+        return new Period(start, end);
     }
 
     private static DateTime ParseToDateTime(DateTime date, string start)
