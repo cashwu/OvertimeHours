@@ -19,44 +19,10 @@ public class OvertimeHandler
     {
         var result = new List<OvertimePeriod>();
 
-        // get overtime day type
-        var calenderSetting01 = _calenderSettings.FirstOrDefault(a => a.Date == overtimeForm.Period.Start.Date);
-
-        var calenderSetting02 = default(CalenderSetting);
-
-        if (overtimeForm.IsCrossDay)
-        {
-            calenderSetting02 = _calenderSettings.FirstOrDefault(a => a.Date == overtimeForm.Period.End.Date);
-        }
-
-        // get overtime setting by type
-        var overtimeSettingType01 = calenderSetting01.ToOvertimeSettingType();
-        var overtimeSetting01 = _overtimeSettings.FirstOrDefault(a => a.Type == overtimeSettingType01);
-
-        var overtimeSetting02 = default(OvertimeSetting);
-
-        if (calenderSetting02 is not null)
-        {
-            var overtimeSettingType02 = calenderSetting02.ToOvertimeSettingType();
-            overtimeSetting02 = _overtimeSettings.FirstOrDefault(a => a.Type == overtimeSettingType02);
-        }
-
-        // set base date
-        overtimeSetting01 = overtimeSetting01.SetBaseDate(overtimeForm.Period.Start.Date);
-
-        if (overtimeSetting02 is not null)
-        {
-            overtimeSetting02 = overtimeSetting02.SetBaseDate(overtimeForm.Period.End.Date);
-        }
-
-        // split setting
-        var newOvertimeSetting01 = overtimeSetting01.SplitSetting();
-        var newOvertimeSetting02 = overtimeSetting02?.SplitSetting() ?? Enumerable.Empty<OvertimeSetting>();
-
-        var newOvertimeSetting = newOvertimeSetting01.Concat(newOvertimeSetting02);
+        var overtimeSettings = OvertimeSetting(overtimeForm);
 
         // get real overtime
-        foreach (var setting in newOvertimeSetting)
+        foreach (var setting in overtimeSettings)
         {
             var period = setting.Period.OverlapPeriod(overtimeForm.Period);
 
@@ -77,5 +43,32 @@ public class OvertimeHandler
         }
 
         return result;
+    }
+
+    private IEnumerable<OvertimeSetting> OvertimeSetting(OvertimeForm overtimeForm)
+    {
+        var overtimeSettingForStartDate = OvertimeSetting(overtimeForm.Period.Start.Date);
+
+        if (overtimeForm.IsCrossDay == false)
+        {
+            return overtimeSettingForStartDate;
+        }
+
+        var overtimeSettingForEndDate = OvertimeSetting(overtimeForm.Period.End.Date);
+
+        return overtimeSettingForStartDate.Concat(overtimeSettingForEndDate);
+    }
+
+    [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
+    private OvertimeSettings OvertimeSetting(DateTime date)
+    {
+        // get overtime day type
+        var calenderSetting = _calenderSettings.FirstOrDefault(a => a.Date == date);
+        var overtimeSettingType = calenderSetting.ToOvertimeSettingType();
+
+        // get overtime setting by type
+        var overtimeSetting = _overtimeSettings.FirstOrDefault(a => a.Type == overtimeSettingType);
+
+        return overtimeSetting.SetBaseDate(date);
     }
 }

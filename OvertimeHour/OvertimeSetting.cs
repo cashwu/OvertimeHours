@@ -19,9 +19,9 @@ public class OvertimeSetting
         Type = type;
     }
 
-    public (Period period, Rate rate) DaySetting { get; private set; }
+    public (Period period, Rate rate) DaySetting { get; }
 
-    public (Period period, Rate rate) NightSetting { get; private set; }
+    public (Period period, Rate rate) NightSetting { get; }
 
     public EnumOvertimeSettingType Type { get; }
 
@@ -40,21 +40,13 @@ public class OvertimeSetting
                    : rateNight;
     }
 
-    public OvertimeSetting SetBaseDate(DateTime baseDate)
+    public OvertimeSettings SetBaseDate(DateTime baseDate)
     {
         var dayPeriod = new Period(baseDate, DaySetting.period.OriginStart, DaySetting.period.OriginEnd);
-        DaySetting = (dayPeriod, DaySetting.rate);
+        var daySetting = new OvertimeSetting(dayPeriod, DaySetting.rate);
 
         var nightPeriod = new Period(baseDate, NightSetting.period.OriginStart, NightSetting.period.OriginEnd);
-        NightSetting = (nightPeriod, NightSetting.rate);
-
-        return new OvertimeSetting(DaySetting, NightSetting, Type);
-    }
-
-    public OvertimeSettings SplitSetting()
-    {
-        var daySetting = new OvertimeSetting(DaySetting.period, DaySetting.rate);
-        var nightSetting = new OvertimeSetting(NightSetting.period, NightSetting.rate);
+        var nightSetting = new OvertimeSetting(nightPeriod, NightSetting.rate);
 
         return new OvertimeSettings(daySetting, nightSetting);
     }
