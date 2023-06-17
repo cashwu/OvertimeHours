@@ -1,5 +1,3 @@
-using OvertimeHour.Enums;
-
 namespace OvertimeHour;
 
 public class OvertimeSettings : List<OvertimeSetting>
@@ -24,32 +22,5 @@ public class OvertimeSettings : List<OvertimeSetting>
                 Add(overtimePeriodSetting);
             }
         }
-    }
-
-    public List<Overtime> CreateOvertime(Period overTimePeriod)
-    {
-        var result = new List<Overtime>();
-
-        foreach (var overtimeSetting in this)
-        {
-            var period = overtimeSetting.Period.OverlapPeriod(overTimePeriod);
-
-            if (period == null)
-            {
-                continue;
-            }
-
-            var anyDayOvertime = result.Any(a => a.Type == EnumRateType.Day);
-
-            result.Add(new Overtime
-            {
-                Start = period.Start,
-                End = period.End,
-                Rate = overtimeSetting.RealRate(anyDayOvertime),
-                Type = overtimeSetting.Rate.Type
-            });
-        }
-
-        return result;
     }
 }
