@@ -42,7 +42,9 @@ public class Period
 
     public DateTime End { get; }
 
-    public bool IsCrossDay => End <= Start;
+    public bool IsSettingCrossDay => End <= Start;
+
+    public bool IsCrossDay => Start.Date != End.Date;
 
     public Period OverlapPeriod(Period another)
     {

@@ -7,7 +7,7 @@ public class OvertimeSettings : List<OvertimeSetting>
         foreach (var overtimePeriodSetting in overtimePeriodSettings)
         {
             if (overtimePeriodSetting.Period is not null
-                && overtimePeriodSetting.Period.IsCrossDay)
+                && overtimePeriodSetting.Period.IsSettingCrossDay)
             {
                 var period = new Period(overtimePeriodSetting.Period.BaseDate, overtimePeriodSetting.Period.OriginStart, "00:00");
 

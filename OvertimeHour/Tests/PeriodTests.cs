@@ -112,7 +112,7 @@ public class PeriodTests
         var baseDate = new DateTime(2023, 06, 01);
         var period = new Period(baseDate, "23:00", "00:01");
 
-        period.IsCrossDay.Should().BeTrue();
+        period.IsSettingCrossDay.Should().BeTrue();
     }
 
     [Fact]
@@ -121,7 +121,7 @@ public class PeriodTests
         var baseDate = new DateTime(2023, 06, 01);
         var period = new Period(baseDate, "23:00", "00:00");
 
-        period.IsCrossDay.Should().BeFalse();
+        period.IsSettingCrossDay.Should().BeFalse();
     }
 
     [Fact]

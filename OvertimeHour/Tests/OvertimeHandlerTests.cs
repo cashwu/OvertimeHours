@@ -109,7 +109,7 @@ public class OvertimeHandlerTests
     }
 
     /// <summary>
-    /// workday -> workday
+    /// workday
     /// 
     /// overtime
     /// 20 - 23
@@ -187,10 +187,47 @@ public class OvertimeHandlerTests
         });
     }
 
+    /// <summary>
+    /// workday -> holiday
+    /// 
+    /// overtime
+    /// 22 - 01
+    ///
+    /// real overtime rate
+    /// 22 - 00 (200), 00 - 01 (200)
+    /// </summary>
+    [Fact]
+    public void workday_night_overlap_cross_holiday()
+    {
+        var overtimeForm = new OvertimeForm(new DateTime(2023, 06, 02, 22, 00, 00),
+                                            new DateTime(2023, 06, 03, 01, 00, 00));
+
+        var overtimes = _overtimeHandler.Handler(overtimeForm);
+
+        overtimes.Should().BeEquivalentTo(new List<OvertimePeriod>
+        {
+            new()
+            {
+                Start = new DateTime(2023, 06, 02, 22, 00, 00),
+                End = new DateTime(2023, 06, 03, 00, 00, 00),
+                Rate = 200,
+                Type = EnumRateType.Night
+            },
+            new()
+            {
+                Start = new DateTime(2023, 06, 03, 00, 00, 00),
+                End = new DateTime(2023, 06, 03, 01, 00, 00),
+                Rate = 350,
+                Type = EnumRateType.Night
+            }
+        });
+    }
+
     private static CalenderSettings GivenCalenderSettings()
     {
         return new CalenderSettings(new CalenderSetting(new DateTime(2023, 06, 01), EnumCalenderType.Workday),
-                                    new CalenderSetting(new DateTime(2023, 06, 02), EnumCalenderType.Workday));
+                                    new CalenderSetting(new DateTime(2023, 06, 02), EnumCalenderType.Workday),
+                                    new CalenderSetting(new DateTime(2023, 06, 03), EnumCalenderType.Holiday));
     }
 
     private static OvertimeSettings GivenOvertimeSettings()
