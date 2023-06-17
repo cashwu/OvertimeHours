@@ -4,10 +4,11 @@ namespace OvertimeHour;
 
 public class OvertimeSetting
 {
-    public OvertimeSetting(Period period, Rate rate)
+    public OvertimeSetting(Period period, Rate rate, EnumOvertimeSettingType type)
     {
         Period = period;
         Rate = rate;
+        Type = type;
     }
 
     public OvertimeSetting((Period period, Rate rate) daySetting,
@@ -43,10 +44,10 @@ public class OvertimeSetting
     public OvertimeSettings SetBaseDate(DateTime baseDate)
     {
         var dayPeriod = new Period(baseDate, DaySetting.period.OriginStart, DaySetting.period.OriginEnd);
-        var daySetting = new OvertimeSetting(dayPeriod, DaySetting.rate);
+        var daySetting = new OvertimeSetting(dayPeriod, DaySetting.rate, Type);
 
         var nightPeriod = new Period(baseDate, NightSetting.period.OriginStart, NightSetting.period.OriginEnd);
-        var nightSetting = new OvertimeSetting(nightPeriod, NightSetting.rate);
+        var nightSetting = new OvertimeSetting(nightPeriod, NightSetting.rate, Type);
 
         return new OvertimeSettings(daySetting, nightSetting);
     }

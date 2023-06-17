@@ -14,10 +14,11 @@ public class OvertimeSettingTests
         var period = new Period(baseDate, "06:00", "20:00");
         var overtimeRate = new Rate(150);
 
-        var overtimeSetting = new OvertimeSetting(period, overtimeRate);
+        var overtimeSetting = new OvertimeSetting(period, overtimeRate, EnumOvertimeSettingType.Workday);
 
         overtimeSetting.Period.Should().BeEquivalentTo(period);
         overtimeSetting.Rate.Should().BeEquivalentTo(overtimeRate);
+        overtimeSetting.Type.Should().Be(EnumOvertimeSettingType.Workday);
     }
 
     [Fact]

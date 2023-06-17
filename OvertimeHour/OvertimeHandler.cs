@@ -54,6 +54,9 @@ public class OvertimeHandler
             return overtimeSettingForStartDate;
         }
 
+        // // remove cross day data
+        // overtimeSettingForStartDate.RemoveAll(a => a.Period.Start.Date == overtimeForm.Period.Start.Date);
+
         var overtimeSettingForEndDate = OvertimeSetting(overtimeForm.Period.End.Date);
 
         return overtimeSettingForStartDate.Concat(overtimeSettingForEndDate);

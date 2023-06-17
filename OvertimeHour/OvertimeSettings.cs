@@ -4,22 +4,22 @@ public class OvertimeSettings : List<OvertimeSetting>
 {
     public OvertimeSettings(params OvertimeSetting[] overtimePeriodSettings)
     {
-        foreach (var overtimePeriodSetting in overtimePeriodSettings)
+        foreach (var setting in overtimePeriodSettings)
         {
-            if (overtimePeriodSetting.Period is not null
-                && overtimePeriodSetting.Period.IsSettingCrossDay)
+            if (setting.Period is not null
+                && setting.Period.IsSettingCrossDay)
             {
-                var period = new Period(overtimePeriodSetting.Period.BaseDate, overtimePeriodSetting.Period.OriginStart, "00:00");
+                var period = new Period(setting.Period.BaseDate, setting.Period.OriginStart, "00:00");
 
-                Add(new OvertimeSetting(period, overtimePeriodSetting.Rate));
+                Add(new OvertimeSetting(period, setting.Rate, setting.Type));
 
-                var crossDayPeriod = new Period(overtimePeriodSetting.Period.BaseDate.AddDays(1), "00:00", overtimePeriodSetting.Period.OriginEnd);
+                var crossDayPeriod = new Period(setting.Period.BaseDate.AddDays(1), "00:00", setting.Period.OriginEnd);
 
-                Add(new OvertimeSetting(crossDayPeriod, overtimePeriodSetting.Rate));
+                Add(new OvertimeSetting(crossDayPeriod, setting.Rate, setting.Type));
             }
             else
             {
-                Add(overtimePeriodSetting);
+                Add(setting);
             }
         }
     }
