@@ -8,4 +8,6 @@ public class OvertimeForm
     }
 
     public Period Period { get; }
+
+    public bool IsCrossDay => Period.IsCrossDay;
 }

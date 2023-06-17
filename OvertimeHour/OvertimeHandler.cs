@@ -24,7 +24,7 @@ public class OvertimeHandler
 
         var calenderSetting02 = default(CalenderSetting);
 
-        if (overtimeForm.Period.Start.Date != overtimeForm.Period.End.Date)
+        if (overtimeForm.IsCrossDay)
         {
             calenderSetting02 = _calenderSettings.FirstOrDefault(a => a.Date == overtimeForm.Period.End.Date);
         }

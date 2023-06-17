@@ -21,7 +21,7 @@ public class Period
         BaseDate = start;
         OriginStart = start.ToString("HH:mm");
         OriginEnd = end.ToString("HH:mm");
-        
+
         Start = start;
         End = end;
     }
