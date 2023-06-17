@@ -45,30 +45,35 @@ public class OvertimeHandler
         return result;
     }
 
+    [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
     private IEnumerable<OvertimeSetting> OvertimeSetting(OvertimeForm overtimeForm)
     {
-        var overtimeSettingForStartDate = OvertimeSetting(overtimeForm.Period.Start.Date);
+        // get overtime day type
+        var startDateCalenderSetting = _calenderSettings.FirstOrDefault(a => a.Date == overtimeForm.Period.Start.Date);
+        var overtimeSettingForStartDate = OvertimeSetting(overtimeForm.Period.Start.Date, startDateCalenderSetting.OvertimeSettingType);
 
         if (overtimeForm.IsCrossDay == false)
         {
             return overtimeSettingForStartDate;
         }
 
-        // // remove cross day data
-        // overtimeSettingForStartDate.RemoveAll(a => a.Period.Start.Date == overtimeForm.Period.Start.Date);
+        var endDateCalenderSetting = _calenderSettings.FirstOrDefault(a => a.Date == overtimeForm.Period.End.Date);
 
-        var overtimeSettingForEndDate = OvertimeSetting(overtimeForm.Period.End.Date);
+        var overtimeSettingForEndDate = OvertimeSetting(overtimeForm.Period.End.Date, endDateCalenderSetting.OvertimeSettingType);
+
+        // cross type
+        if (overtimeSettingForStartDate[0].Type != overtimeSettingForEndDate[0].Type)
+        {
+            // // remove cross day data
+            // overtimeSettingForStartDate.RemoveAll(a => a.Period.Start.Date == overtimeForm.Period.Start.Date);
+        }
 
         return overtimeSettingForStartDate.Concat(overtimeSettingForEndDate);
     }
 
     [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
-    private OvertimeSettings OvertimeSetting(DateTime date)
+    private OvertimeSettings OvertimeSetting(DateTime date, EnumOvertimeSettingType overtimeSettingType)
     {
-        // get overtime day type
-        var calenderSetting = _calenderSettings.FirstOrDefault(a => a.Date == date);
-        var overtimeSettingType = calenderSetting.ToOvertimeSettingType();
-
         // get overtime setting by type
         var overtimeSetting = _overtimeSettings.FirstOrDefault(a => a.Type == overtimeSettingType);
 

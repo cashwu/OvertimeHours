@@ -14,15 +14,18 @@ public class CalenderSetting
 
     public EnumCalenderType Type { get; }
 
-    public EnumOvertimeSettingType ToOvertimeSettingType()
+    public EnumOvertimeSettingType OvertimeSettingType
     {
-        EnumOvertimeSettingType overtimeSettingType = Type switch
+        get
         {
-            EnumCalenderType.Workday => EnumOvertimeSettingType.Workday,
-            EnumCalenderType.Holiday => EnumOvertimeSettingType.Holiday,
-            _ => 0
-        };
+            EnumOvertimeSettingType overtimeSettingType = Type switch
+            {
+                EnumCalenderType.Workday => EnumOvertimeSettingType.Workday,
+                EnumCalenderType.Holiday => EnumOvertimeSettingType.Holiday,
+                _ => 0
+            };
 
-        return overtimeSettingType;
+            return overtimeSettingType;
+        }
     }
 }
