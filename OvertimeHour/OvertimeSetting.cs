@@ -30,11 +30,16 @@ public class OvertimeSetting
 
     public Rate Rate { get; }
 
-    public int RealRate(bool anyDayOvertime)
+    public int RealRate(bool anyDayOvertime, EnumOvertimeSettingType overtimeSettingType)
     {
         var rateNight = anyDayOvertime
                             ? Rate.NightWithDayOvertime
                             : Rate.Night;
+
+        // holiday only one night rate 
+        rateNight = overtimeSettingType == EnumOvertimeSettingType.Holiday
+                        ? Rate.Night
+                        : rateNight;
 
         return Rate.Type == EnumRateType.Day
                    ? Rate.Day

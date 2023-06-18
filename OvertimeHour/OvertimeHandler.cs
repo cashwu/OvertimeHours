@@ -37,7 +37,7 @@ public class OvertimeHandler
             {
                 Start = period.Start,
                 End = period.End,
-                Rate = setting.RealRate(anyDayOvertime),
+                Rate = setting.RealRate(anyDayOvertime, setting.Type),
                 Type = setting.Rate.Type
             });
         }

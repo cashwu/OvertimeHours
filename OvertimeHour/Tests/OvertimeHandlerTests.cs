@@ -223,6 +223,49 @@ public class OvertimeHandlerTests
         });
     }
 
+    /// <summary>
+    /// workday -> holiday
+    /// 
+    /// overtime
+    /// 22 - 01
+    ///
+    /// real overtime rate
+    /// 22 - 00 (workday 200), 00 - 01 (holiday 390)
+    /// </summary>
+    [Fact]
+    public void workday_day_and_night_overlap_cross_holiday()
+    {
+        var overtimeForm = new OvertimeForm(new DateTime(2023, 06, 02, 20, 00, 00),
+                                            new DateTime(2023, 06, 03, 01, 00, 00));
+
+        var overtimes = _overtimeHandler.Handler(overtimeForm);
+
+        overtimes.Should().BeEquivalentTo(new List<OvertimePeriod>
+        {
+            new()
+            {
+                Start = new DateTime(2023, 06, 02, 20, 00, 00),
+                End = new DateTime(2023, 06, 02, 22, 00, 00),
+                Rate = 150,
+                Type = EnumRateType.Day
+            },
+            new()
+            {
+                Start = new DateTime(2023, 06, 02, 22, 00, 00),
+                End = new DateTime(2023, 06, 03, 00, 00, 00),
+                Rate = 210,
+                Type = EnumRateType.Night
+            },
+            new()
+            {
+                Start = new DateTime(2023, 06, 03, 00, 00, 00),
+                End = new DateTime(2023, 06, 03, 01, 00, 00),
+                Rate = 390,
+                Type = EnumRateType.Night
+            }
+        });
+    }
+
     private static CalenderSettings GivenCalenderSettings()
     {
         return new CalenderSettings(new CalenderSetting(new DateTime(2023, 06, 01), EnumCalenderType.Workday),
