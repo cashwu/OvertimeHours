@@ -36,4 +36,13 @@ public class Rate
     public int Night { get; private set; }
 
     public int NightWithDayOvertime { get; private set; }
+
+    public int RealRate(bool anyDayOvertime)
+    {
+        return Type == EnumRateType.Day
+                   ? Day
+                   : anyDayOvertime
+                       ? NightWithDayOvertime
+                       : Night;
+    }
 }

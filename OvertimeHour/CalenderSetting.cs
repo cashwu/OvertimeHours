@@ -1,5 +1,7 @@
 using OvertimeHour.Enums;
 
+#pragma warning disable CS8524
+
 namespace OvertimeHour;
 
 public class CalenderSetting
@@ -18,11 +20,10 @@ public class CalenderSetting
     {
         get
         {
-            EnumOvertimeSettingType overtimeSettingType = Type switch
+            var overtimeSettingType = Type switch
             {
                 EnumCalenderType.Workday => EnumOvertimeSettingType.Workday,
                 EnumCalenderType.Holiday => EnumOvertimeSettingType.Holiday,
-                _ => 0
             };
 
             return overtimeSettingType;

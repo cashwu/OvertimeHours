@@ -1,54 +1,22 @@
-using System.Globalization;
-
 namespace OvertimeHour;
 
 public class Period
 {
-    public Period(DateTime baseDate, string start, string end)
-    {
-        BaseDate = baseDate;
-        OriginStart = start;
-        OriginEnd = end;
-
-        var endDate = end == "00:00" ? baseDate.AddDays(1) : baseDate;
-
-        Start = ParseToDateTime(baseDate, start);
-        End = ParseToDateTime(endDate, end);
-    }
-
     public Period(DateTime start, DateTime end)
     {
-        BaseDate = start;
-        OriginStart = start.ToString("HH:mm");
-        OriginEnd = end.ToString("HH:mm");
-
         Start = start;
         End = end;
     }
-
-    public Period(string start, string end)
-    {
-        OriginStart = start;
-        OriginEnd = end;
-    }
-
-    public DateTime BaseDate { get; set; }
-
-    public string OriginStart { get; set; }
-
-    public string OriginEnd { get; set; }
 
     public DateTime Start { get; set; }
 
     public DateTime End { get; set; }
 
-    public bool IsSettingCrossDay => End <= Start;
-
     public bool IsCrossDay => Start.Date != End.Date;
 
     public Period OverlapPeriod(Period another)
     {
-        if (IsTimeOverlap(another) == false)
+        if (IsOverlap(another) == false)
         {
             return default;
         }
@@ -59,12 +27,7 @@ public class Period
         return new Period(start, end);
     }
 
-    private static DateTime ParseToDateTime(DateTime date, string start)
-    {
-        return DateTime.ParseExact($"{date:yyyy/MM/dd} {start}", "yyyy/MM/dd HH:mm", new DateTimeFormatInfo());
-    }
-
-    private bool IsTimeOverlap(Period another)
+    private bool IsOverlap(Period another)
     {
         return Start < another.End && another.Start < End;
     }

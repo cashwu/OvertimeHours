@@ -26,10 +26,10 @@ public class OvertimeHandlerTests
     [Fact]
     public void workday_day_overlap_not_cross_day()
     {
-        var overtimeForm = new OvertimeForm(new DateTime(2023, 06, 01, 18, 00, 00),
-                                            new DateTime(2023, 06, 01, 20, 00, 00));
+        var overtimePeriod = GivenOvertimePeriod(06, 01, 18,
+                                                 06, 01, 20);
 
-        var overtimes = _overtimeHandler.Handler(overtimeForm);
+        var overtimes = _overtimeHandler.Handler(overtimePeriod);
 
         overtimes.Should().BeEquivalentTo(new List<OvertimePeriod>
         {
@@ -55,10 +55,10 @@ public class OvertimeHandlerTests
     [Fact]
     public void workday_night_overlap_not_cross_day()
     {
-        var overtimeForm = new OvertimeForm(new DateTime(2023, 06, 01, 22, 00, 00),
-                                            new DateTime(2023, 06, 01, 23, 00, 00));
+        var overtimePeriod = GivenOvertimePeriod(06, 01, 22,
+                                                 06, 01, 23);
 
-        var overtimes = _overtimeHandler.Handler(overtimeForm);
+        var overtimes = _overtimeHandler.Handler(overtimePeriod);
 
         overtimes.Should().BeEquivalentTo(new List<OvertimePeriod>
         {
@@ -84,10 +84,10 @@ public class OvertimeHandlerTests
     [Fact]
     public void workday_night_overlap_cross_workday()
     {
-        var overtimeForm = new OvertimeForm(new DateTime(2023, 06, 01, 22, 00, 00),
-                                            new DateTime(2023, 06, 02, 01, 00, 00));
+        var overtimePeriod = GivenOvertimePeriod(06, 01, 22,
+                                                 06, 02, 01);
 
-        var overtimes = _overtimeHandler.Handler(overtimeForm);
+        var overtimes = _overtimeHandler.Handler(overtimePeriod);
 
         overtimes.Should().BeEquivalentTo(new List<OvertimePeriod>
         {
@@ -120,10 +120,10 @@ public class OvertimeHandlerTests
     [Fact]
     public void workday_day_and_night_overlap_not_cross_day()
     {
-        var overtimeForm = new OvertimeForm(new DateTime(2023, 06, 01, 20, 00, 00),
-                                            new DateTime(2023, 06, 01, 23, 00, 00));
+        var overtimePeriod = GivenOvertimePeriod(06, 01, 20,
+                                                 06, 01, 23);
 
-        var overtimes = _overtimeHandler.Handler(overtimeForm);
+        var overtimes = _overtimeHandler.Handler(overtimePeriod);
 
         overtimes.Should().BeEquivalentTo(new List<OvertimePeriod>
         {
@@ -156,10 +156,10 @@ public class OvertimeHandlerTests
     [Fact]
     public void workday_day_and_night_overlap_cross_workday()
     {
-        var overtimeForm = new OvertimeForm(new DateTime(2023, 06, 01, 20, 00, 00),
-                                            new DateTime(2023, 06, 02, 01, 00, 00));
+        var overtimePeriod = GivenOvertimePeriod(06, 01, 20,
+                                                 06, 02, 01);
 
-        var overtimes = _overtimeHandler.Handler(overtimeForm);
+        var overtimes = _overtimeHandler.Handler(overtimePeriod);
 
         overtimes.Should().BeEquivalentTo(new List<OvertimePeriod>
         {
@@ -199,10 +199,10 @@ public class OvertimeHandlerTests
     [Fact]
     public void workday_night_overlap_cross_holiday()
     {
-        var overtimeForm = new OvertimeForm(new DateTime(2023, 06, 02, 22, 00, 00),
-                                            new DateTime(2023, 06, 03, 01, 00, 00));
+        var overtimePeriod = GivenOvertimePeriod(06, 02, 22,
+                                                 06, 03, 01);
 
-        var overtimes = _overtimeHandler.Handler(overtimeForm);
+        var overtimes = _overtimeHandler.Handler(overtimePeriod);
 
         overtimes.Should().BeEquivalentTo(new List<OvertimePeriod>
         {
@@ -235,10 +235,10 @@ public class OvertimeHandlerTests
     [Fact]
     public void workday_day_and_night_overlap_cross_holiday()
     {
-        var overtimeForm = new OvertimeForm(new DateTime(2023, 06, 02, 20, 00, 00),
-                                            new DateTime(2023, 06, 03, 01, 00, 00));
+        var overtimePeriod = GivenOvertimePeriod(06, 02, 20,
+                                                 06, 03, 01);
 
-        var overtimes = _overtimeHandler.Handler(overtimeForm);
+        var overtimes = _overtimeHandler.Handler(overtimePeriod);
 
         overtimes.Should().BeEquivalentTo(new List<OvertimePeriod>
         {
@@ -278,10 +278,10 @@ public class OvertimeHandlerTests
     [Fact]
     public void holiday_night_overlap_cross_workday()
     {
-        var overtimeForm = new OvertimeForm(new DateTime(2023, 06, 03, 22, 00, 00),
-                                            new DateTime(2023, 06, 04, 01, 00, 00));
+        var overtimePeriod = GivenOvertimePeriod(06, 03, 22,
+                                                 06, 04, 01);
 
-        var overtimes = _overtimeHandler.Handler(overtimeForm);
+        var overtimes = _overtimeHandler.Handler(overtimePeriod);
 
         overtimes.Should().BeEquivalentTo(new List<OvertimePeriod>
         {
@@ -314,10 +314,10 @@ public class OvertimeHandlerTests
     [Fact]
     public void holiday_day_and_night_overlap_cross_workday()
     {
-        var overtimeForm = new OvertimeForm(new DateTime(2023, 06, 03, 20, 00, 00),
-                                            new DateTime(2023, 06, 04, 01, 00, 00));
+        var overtimePeriod = GivenOvertimePeriod(06, 03, 20,
+                                                 06, 04, 01);
 
-        var overtimes = _overtimeHandler.Handler(overtimeForm);
+        var overtimes = _overtimeHandler.Handler(overtimePeriod);
 
         overtimes.Should().BeEquivalentTo(new List<OvertimePeriod>
         {
@@ -345,24 +345,32 @@ public class OvertimeHandlerTests
         });
     }
 
-    private static CalenderSettings GivenCalenderSettings()
+    private static Period GivenOvertimePeriod(int startMonth, int startDay, int startHour,
+                                              int endMonth, int endDay, int endHour)
     {
-        return new CalenderSettings(new CalenderSetting(new DateTime(2023, 06, 01), EnumCalenderType.Workday),
-                                    new CalenderSetting(new DateTime(2023, 06, 02), EnumCalenderType.Workday),
-                                    new CalenderSetting(new DateTime(2023, 06, 03), EnumCalenderType.Holiday),
-                                    new CalenderSetting(new DateTime(2023, 06, 04), EnumCalenderType.Workday));
+        return new Period(new DateTime(2023, startMonth, startDay, startHour, 00, 00),
+                          new DateTime(2023, endMonth, endDay, endHour, 00, 00));
     }
 
-    private static OvertimeSettings GivenOvertimeSettings()
+    private static List<CalenderSetting> GivenCalenderSettings()
     {
-        var workDaySetting = new OvertimeSetting((new Period("06:00", "22:00"), new Rate(150)),
-                                                 (new Period("22:00", "06:00"), new Rate(200, 210)),
-                                                 EnumOvertimeSettingType.Workday);
+        return new List<CalenderSetting>
+        {
+            new(new DateTime(2023, 06, 01), EnumCalenderType.Workday),
+            new(new DateTime(2023, 06, 02), EnumCalenderType.Workday),
+            new(new DateTime(2023, 06, 03), EnumCalenderType.Holiday),
+            new(new DateTime(2023, 06, 04), EnumCalenderType.Workday)
+        };
+    }
 
-        var holidaySetting = new OvertimeSetting((new Period("06:00", "22:00"), new Rate(300)),
-                                                 (new Period("22:00", "06:00"), new Rate(390, 0)),
-                                                 EnumOvertimeSettingType.Holiday);
-
-        return new OvertimeSettings(workDaySetting, holidaySetting);
+    private static List<OvertimeSettingFromDb> GivenOvertimeSettings()
+    {
+        return new List<OvertimeSettingFromDb>
+        {
+            new("06:00", "22:00", new Rate(150), EnumOvertimeSettingType.Workday),
+            new("22:00", "06:00", new Rate(200, 210), EnumOvertimeSettingType.Workday),
+            new("06:00", "22:00", new Rate(300), EnumOvertimeSettingType.Holiday),
+            new("22:00", "06:00", new Rate(390, 390), EnumOvertimeSettingType.Holiday)
+        };
     }
 }
