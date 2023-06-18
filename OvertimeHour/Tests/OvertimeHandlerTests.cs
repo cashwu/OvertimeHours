@@ -194,7 +194,7 @@ public class OvertimeHandlerTests
     /// 22 - 01
     ///
     /// real overtime rate
-    /// 22 - 00 (200), 00 - 01 (200)
+    /// 22 - 00 (workday 200), 00 - 01 (holiday 390)
     /// </summary>
     [Fact]
     public void workday_night_overlap_cross_holiday()
@@ -217,7 +217,7 @@ public class OvertimeHandlerTests
             {
                 Start = new DateTime(2023, 06, 03, 00, 00, 00),
                 End = new DateTime(2023, 06, 03, 01, 00, 00),
-                Rate = 350,
+                Rate = 390,
                 Type = EnumRateType.Night
             }
         });
@@ -237,7 +237,7 @@ public class OvertimeHandlerTests
                                                  EnumOvertimeSettingType.Workday);
 
         var holidaySetting = new OvertimeSetting((new Period("06:00", "22:00"), new Rate(300)),
-                                                 (new Period("22:00", "06:00"), new Rate(350, 0)),
+                                                 (new Period("22:00", "06:00"), new Rate(390, 0)),
                                                  EnumOvertimeSettingType.Holiday);
 
         return new OvertimeSettings(workDaySetting, holidaySetting);
