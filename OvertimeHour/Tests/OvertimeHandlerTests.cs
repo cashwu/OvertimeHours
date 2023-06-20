@@ -230,7 +230,7 @@ public class OvertimeHandlerTests
     /// 20 - 01
     ///
     /// real overtime rate
-    /// 20 - 22 (workday 150), 22 - 00 (workday 200), 00 - 01 (holiday 390)
+    /// 20 - 22 (workday 150), 22 - 00 (workday 210), 00 - 01 (holiday 390)
     /// </summary>
     [Fact]
     public void workday_day_and_night_overlap_cross_holiday()
@@ -303,7 +303,7 @@ public class OvertimeHandlerTests
     }
 
     /// <summary>
-    /// holiday -> workday-
+    /// holiday -> workday
     /// 
     /// overtime
     /// 20 - 01
