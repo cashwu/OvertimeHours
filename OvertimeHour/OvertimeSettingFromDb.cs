@@ -14,17 +14,18 @@ public class OvertimeSettingFromDb
 
     public EnumOvertimeSettingType Type { get; }
 
-    private string End { get; set; }
+    private string End { get; }
 
-    private string Start { get; set; }
+    private string Start { get; }
 
     private Rate Rate { get; }
 
-    public IEnumerable<OvertimeSetting> ConvertToOvertimeSetting(DateTime baseDate)
+    public IEnumerable<OvertimeSetting> ToOvertimeSetting(DateTime baseDate)
     {
-        var start = baseDate.Add(TimeSpan.Parse(Start));
-        var end = baseDate.Add(TimeSpan.Parse(End));
+        var start = DateTime.Parse($"{baseDate.Date:yyyy/MM/dd} {Start}");
+        var end = DateTime.Parse($"{baseDate.Date:yyyy/MM/dd} {End}");
 
+        // setting 22:00 - 06:00
         // 0601 06:00 <= 0601 22:00
         if (end <= start)
         {

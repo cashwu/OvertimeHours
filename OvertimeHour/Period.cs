@@ -8,9 +8,9 @@ public class Period
         End = end;
     }
 
-    public DateTime Start { get; set; }
+    public DateTime Start { get; }
 
-    public DateTime End { get; set; }
+    public DateTime End { get; }
 
     public bool IsCrossDay => Start.Date != End.Date;
 

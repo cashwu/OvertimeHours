@@ -17,14 +17,14 @@ public class OvertimeHandler
     [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
     public List<OvertimePeriod> Handler(Period overtimePeriod)
     {
-        var result = new List<OvertimePeriod>();
-
         var overtimeSettings = OvertimeSettings(overtimePeriod.Start);
 
         if (overtimePeriod.IsCrossDay)
         {
             overtimeSettings.AddRange(OvertimeSettings(overtimePeriod.End));
         }
+
+        var result = new List<OvertimePeriod>();
 
         // get real overtime
         foreach (var setting in overtimeSettings)
@@ -38,13 +38,7 @@ public class OvertimeHandler
 
             var anyDayOvertime = result.Any(a => a.Type == EnumRateType.Day);
 
-            result.Add(new OvertimePeriod
-            {
-                Start = period.Start,
-                End = period.End,
-                Rate = setting.Rate.RealRate(anyDayOvertime),
-                Type = setting.Rate.Type
-            });
+            result.Add(new OvertimePeriod(period, setting.Rate, anyDayOvertime));
         }
 
         return result;
@@ -56,7 +50,7 @@ public class OvertimeHandler
         var calenderSetting = _calenderSettings.FirstOrDefault(a => a.Date == dateTime.Date);
 
         return _overtimeSettingFromDbs.Where(a => a.Type == calenderSetting.OvertimeSettingType)
-                                      .Select(a => a.ConvertToOvertimeSetting(dateTime.Date))
+                                      .Select(a => a.ToOvertimeSetting(dateTime.Date))
                                       .SelectMany(a => a)
                                       .ToList();
     }

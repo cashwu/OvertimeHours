@@ -29,13 +29,13 @@ public class Rate
         Type = EnumRateType.Night;
     }
 
-    public EnumRateType Type { get; set; }
+    public EnumRateType Type { get; }
 
-    public int Day { get; private set; }
+    public int Day { get; }
 
-    public int Night { get; private set; }
+    public int Night { get; }
 
-    public int NightWithDayOvertime { get; private set; }
+    public int NightWithDayOvertime { get; }
 
     public int RealRate(bool anyDayOvertime)
     {

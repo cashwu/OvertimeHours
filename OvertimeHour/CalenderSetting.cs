@@ -6,21 +6,21 @@ namespace OvertimeHour;
 
 public class CalenderSetting
 {
+    private readonly EnumCalenderType _type;
+
     public CalenderSetting(DateTime date, EnumCalenderType type)
     {
         Date = date;
-        Type = type;
+        _type = type;
     }
 
     public DateTime Date { get; }
-
-    public EnumCalenderType Type { get; }
 
     public EnumOvertimeSettingType OvertimeSettingType
     {
         get
         {
-            var overtimeSettingType = Type switch
+            var overtimeSettingType = _type switch
             {
                 EnumCalenderType.Workday => EnumOvertimeSettingType.Workday,
                 EnumCalenderType.Holiday => EnumOvertimeSettingType.Holiday,
