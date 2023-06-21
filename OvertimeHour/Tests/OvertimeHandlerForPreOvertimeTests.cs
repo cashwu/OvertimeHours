@@ -17,30 +17,49 @@ public class OvertimeHandlerForPreOvertimeTests
     /// <summary>
     /// workday
     /// 
+    /// history
+    /// 20 - 22
+    /// 
     /// overtime
-    /// 18 - 20
+    /// 22 - 23
     ///
     /// real overtime rate
-    /// 18 - 20 (150)
+    /// 22 - 23 (210) 
     /// </summary>
     [Fact]
-    public void workday_day_overlap_not_cross_day()
+    public void history_day_overtime_workday_night_overlap_not_cross_day()
     {
-        var overtimePeriod = GivenOvertimePeriod(06, 01, 18,
-                                                 06, 01, 20);
+        var historyOvertimePeriod = new List<OvertimePeriod>
+        {
+            new()
+            {
+                Start = new DateTime(2023, 06, 01, 20, 00, 00),
+                End = new DateTime(2023, 06, 01, 22, 00, 00),
+                Rate = 150,
+                Type = EnumRateType.Day // TODO history not type data ??
+            }
+        };
 
-        var overtimes = _overtimeHandler.Handler(overtimePeriod);
+        var overtimePeriod = GivenOvertimePeriod(06, 01, 22,
+                                                 06, 01, 23);
+
+        var overtimes = _overtimeHandler.Handler(overtimePeriod, historyOvertimePeriod);
 
         overtimes.Should().BeEquivalentTo(new List<OvertimePeriod>
         {
             new()
             {
-                Start = new DateTime(2023, 06, 01, 18, 00, 00),
-                End = new DateTime(2023, 06, 01, 20, 00, 00),
-                Rate = 150,
-                Type = EnumRateType.Day
+                Start = new DateTime(2023, 06, 01, 22, 00, 00),
+                End = new DateTime(2023, 06, 01, 23, 00, 00),
+                Rate = 210,
+                Type = EnumRateType.Night
             }
         });
+    }
+
+    private static List<OvertimePeriod> GivenHistoryOvertimePeriod()
+    {
+        return new List<OvertimePeriod>();
     }
 
     private static Period GivenOvertimePeriod(int startMonth, int startDay, int startHour,
