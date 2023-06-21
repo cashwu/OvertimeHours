@@ -70,17 +70,14 @@ public class OvertimeHandler
             {
                 var historyNightRateOvertime = historyNightRateOvertimes[0].ToPeriod();
 
-                foreach (var setting in overtimeSettings)
-                {
-                    var period = setting.Period.OverlapPeriod(historyNightRateOvertime);
-
-                    if (period == null)
-                    {
-                        continue;
-                    }
-
-                    updateOvertime.Add(new OvertimePeriod(period, setting.Rate, true));
-                }
+                updateOvertime = overtimeSettings.Select(a => new
+                                                 {
+                                                     Setting = a,
+                                                     NewPeriod = a.Period.OverlapPeriod(historyNightRateOvertime)
+                                                 })
+                                                 .Where(a => a.NewPeriod != null)
+                                                 .Select(a => new OvertimePeriod(a.NewPeriod, a.Setting.Rate, true))
+                                                 .ToList();
             }
         }
 
