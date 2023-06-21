@@ -24,6 +24,11 @@ public class OvertimeHandler
             overtimeSettings.AddRange(OvertimeSettings(overtimePeriod.End));
         }
 
+        if (historyOvertimePeriod != null)
+        {
+            // TODO check history type data 
+        }
+
         var result = new List<OvertimePeriod>();
 
         // get real overtime
@@ -36,7 +41,16 @@ public class OvertimeHandler
                 continue;
             }
 
-            var anyDayOvertime = result.Any(a => a.Type == EnumRateType.Day);
+            bool anyDayOvertime;
+
+            if (historyOvertimePeriod == null)
+            {
+                anyDayOvertime = result.Any(a => a.Type == EnumRateType.Day);
+            }
+            else
+            {
+                anyDayOvertime = result.Concat(historyOvertimePeriod).Any(a => a.Type == EnumRateType.Day);
+            }
 
             result.Add(new OvertimePeriod(period, setting.Rate, anyDayOvertime));
         }
