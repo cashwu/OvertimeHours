@@ -29,9 +29,9 @@ public class OvertimeHandlerTests
         var overtimePeriod = GivenOvertimePeriod(06, 01, 18,
                                                  06, 01, 20);
 
-        var overtimes = _overtimeHandler.Handler(overtimePeriod);
+        var (insertOvertime, _) = _overtimeHandler.Handler(overtimePeriod);
 
-        overtimes.Should().BeEquivalentTo(new List<OvertimePeriod>
+        insertOvertime.Should().BeEquivalentTo(new List<OvertimePeriod>
         {
             new()
             {
@@ -58,9 +58,9 @@ public class OvertimeHandlerTests
         var overtimePeriod = GivenOvertimePeriod(06, 01, 22,
                                                  06, 01, 23);
 
-        var overtimes = _overtimeHandler.Handler(overtimePeriod);
+        var (insertOvertime, _) = _overtimeHandler.Handler(overtimePeriod);
 
-        overtimes.Should().BeEquivalentTo(new List<OvertimePeriod>
+        insertOvertime.Should().BeEquivalentTo(new List<OvertimePeriod>
         {
             new()
             {
@@ -87,9 +87,9 @@ public class OvertimeHandlerTests
         var overtimePeriod = GivenOvertimePeriod(06, 01, 22,
                                                  06, 02, 01);
 
-        var overtimes = _overtimeHandler.Handler(overtimePeriod);
+        var (insertOvertime, _) = _overtimeHandler.Handler(overtimePeriod);
 
-        overtimes.Should().BeEquivalentTo(new List<OvertimePeriod>
+        insertOvertime.Should().BeEquivalentTo(new List<OvertimePeriod>
         {
             new()
             {
@@ -123,9 +123,9 @@ public class OvertimeHandlerTests
         var overtimePeriod = GivenOvertimePeriod(06, 01, 20,
                                                  06, 01, 23);
 
-        var overtimes = _overtimeHandler.Handler(overtimePeriod);
+        var (insertOvertime, _) = _overtimeHandler.Handler(overtimePeriod);
 
-        overtimes.Should().BeEquivalentTo(new List<OvertimePeriod>
+        insertOvertime.Should().BeEquivalentTo(new List<OvertimePeriod>
         {
             new()
             {
@@ -159,9 +159,9 @@ public class OvertimeHandlerTests
         var overtimePeriod = GivenOvertimePeriod(06, 01, 20,
                                                  06, 02, 01);
 
-        var overtimes = _overtimeHandler.Handler(overtimePeriod);
+        var (insertOvertime, _) = _overtimeHandler.Handler(overtimePeriod);
 
-        overtimes.Should().BeEquivalentTo(new List<OvertimePeriod>
+        insertOvertime.Should().BeEquivalentTo(new List<OvertimePeriod>
         {
             new()
             {
@@ -202,9 +202,9 @@ public class OvertimeHandlerTests
         var overtimePeriod = GivenOvertimePeriod(06, 02, 22,
                                                  06, 03, 01);
 
-        var overtimes = _overtimeHandler.Handler(overtimePeriod);
+        var (insertOvertime, _) = _overtimeHandler.Handler(overtimePeriod);
 
-        overtimes.Should().BeEquivalentTo(new List<OvertimePeriod>
+        insertOvertime.Should().BeEquivalentTo(new List<OvertimePeriod>
         {
             new()
             {
@@ -238,9 +238,9 @@ public class OvertimeHandlerTests
         var overtimePeriod = GivenOvertimePeriod(06, 02, 20,
                                                  06, 03, 01);
 
-        var overtimes = _overtimeHandler.Handler(overtimePeriod);
+        var (insertOvertime, _) = _overtimeHandler.Handler(overtimePeriod);
 
-        overtimes.Should().BeEquivalentTo(new List<OvertimePeriod>
+        insertOvertime.Should().BeEquivalentTo(new List<OvertimePeriod>
         {
             new()
             {
@@ -281,9 +281,9 @@ public class OvertimeHandlerTests
         var overtimePeriod = GivenOvertimePeriod(06, 03, 22,
                                                  06, 04, 01);
 
-        var overtimes = _overtimeHandler.Handler(overtimePeriod);
+        var (insertOvertime, _) = _overtimeHandler.Handler(overtimePeriod);
 
-        overtimes.Should().BeEquivalentTo(new List<OvertimePeriod>
+        insertOvertime.Should().BeEquivalentTo(new List<OvertimePeriod>
         {
             new()
             {
@@ -317,9 +317,9 @@ public class OvertimeHandlerTests
         var overtimePeriod = GivenOvertimePeriod(06, 03, 20,
                                                  06, 04, 01);
 
-        var overtimes = _overtimeHandler.Handler(overtimePeriod);
+        var (insertOvertime, _) = _overtimeHandler.Handler(overtimePeriod);
 
-        overtimes.Should().BeEquivalentTo(new List<OvertimePeriod>
+        insertOvertime.Should().BeEquivalentTo(new List<OvertimePeriod>
         {
             new()
             {

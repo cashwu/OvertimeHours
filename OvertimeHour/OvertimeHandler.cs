@@ -15,7 +15,7 @@ public class OvertimeHandler
     }
 
     [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
-    public List<OvertimePeriod> Handler(Period overtimePeriod, List<OvertimePeriod> historyOvertimePeriod = null)
+    public (List<OvertimePeriod> insertOvertime, List<OvertimePeriod> updateOvertime) Handler(Period overtimePeriod, List<OvertimePeriod> historyOvertimePeriod = null)
     {
         var overtimeSettings = OvertimeSettings(overtimePeriod.Start);
 
@@ -55,7 +55,7 @@ public class OvertimeHandler
             result.Add(new OvertimePeriod(period, setting.Rate, anyDayOvertime));
         }
 
-        return result;
+        return (result, new List<OvertimePeriod>());
     }
 
     [SuppressMessage("ReSharper", "PossibleNullReferenceException")]

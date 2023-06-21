@@ -43,9 +43,9 @@ public class OvertimeHandlerForPreOvertimeTests
         var overtimePeriod = GivenOvertimePeriod(06, 01, 22,
                                                  06, 01, 23);
 
-        var overtimes = _overtimeHandler.Handler(overtimePeriod, historyOvertimePeriod);
+        var (insertOvertime, updateOvertime) = _overtimeHandler.Handler(overtimePeriod, historyOvertimePeriod);
 
-        overtimes.Should().BeEquivalentTo(new List<OvertimePeriod>
+        insertOvertime.Should().BeEquivalentTo(new List<OvertimePeriod>
         {
             new()
             {
@@ -55,6 +55,8 @@ public class OvertimeHandlerForPreOvertimeTests
                 Type = EnumRateType.Night
             }
         });
+
+        updateOvertime.Should().BeEmpty();
     }
 
     /// <summary>
@@ -89,9 +91,9 @@ public class OvertimeHandlerForPreOvertimeTests
         var overtimePeriod = GivenOvertimePeriod(06, 01, 20,
                                                  06, 01, 22);
 
-        var overtimes = _overtimeHandler.Handler(overtimePeriod, historyOvertimePeriod);
+        (var insertOvertime, var updateOvertime) = _overtimeHandler.Handler(overtimePeriod, historyOvertimePeriod);
 
-        overtimes.Should().BeEquivalentTo(new List<OvertimePeriod>
+        insertOvertime.Should().BeEquivalentTo(new List<OvertimePeriod>
         {
             new()
             {
