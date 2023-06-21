@@ -25,4 +25,9 @@ public class OvertimePeriod
     public int Rate { get; set; }
 
     public EnumRateType Type { get; init; }
+
+    public Period ToPeriod()
+    {
+        return new Period(Start, End);
+    }
 }

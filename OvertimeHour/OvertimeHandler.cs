@@ -29,7 +29,7 @@ public class OvertimeHandler
             // TODO check history type data 
         }
 
-        var result = new List<OvertimePeriod>();
+        var insertOvertime = new List<OvertimePeriod>();
 
         // get real overtime
         foreach (var setting in overtimeSettings)
@@ -45,17 +45,46 @@ public class OvertimeHandler
 
             if (historyOvertimePeriod == null)
             {
-                anyDayOvertime = result.Any(a => a.Type == EnumRateType.Day);
+                anyDayOvertime = insertOvertime.Any(a => a.Type == EnumRateType.Day);
             }
             else
             {
-                anyDayOvertime = result.Concat(historyOvertimePeriod).Any(a => a.Type == EnumRateType.Day);
+                anyDayOvertime = insertOvertime.Concat(historyOvertimePeriod).Any(a => a.Type == EnumRateType.Day);
             }
 
-            result.Add(new OvertimePeriod(period, setting.Rate, anyDayOvertime));
+            insertOvertime.Add(new OvertimePeriod(period, setting.Rate, anyDayOvertime));
         }
 
-        return (result, new List<OvertimePeriod>());
+        // recover 
+        var updateOvertime = new List<OvertimePeriod>();
+
+        if (historyOvertimePeriod != null)
+        {
+            var historyNightRateOvertimes = historyOvertimePeriod.Where(a => a.Type == EnumRateType.Night).ToList();
+            var historyHasNotDayRate = historyOvertimePeriod.Any(a => a.Type == EnumRateType.Day) == false;
+            var currentHasDayRate = insertOvertime.Any(a => a.Type == EnumRateType.Day);
+
+            if (historyNightRateOvertimes.Any()
+                && historyHasNotDayRate
+                && currentHasDayRate)
+            {
+                var historyNightRateOvertime = historyNightRateOvertimes[0].ToPeriod();
+
+                foreach (var setting in overtimeSettings)
+                {
+                    var period = setting.Period.OverlapPeriod(historyNightRateOvertime);
+
+                    if (period == null)
+                    {
+                        continue;
+                    }
+
+                    updateOvertime.Add(new OvertimePeriod(period, setting.Rate, true));
+                }
+            }
+        }
+
+        return (insertOvertime, updateOvertime);
     }
 
     [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
