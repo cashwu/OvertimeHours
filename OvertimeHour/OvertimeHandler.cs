@@ -15,7 +15,7 @@ public class OvertimeHandler
     }
 
     [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
-    public (List<OvertimePeriod> insertOvertime, List<OvertimePeriod> updateOvertime) Handler(Period overtimePeriod, List<OvertimePeriod> historyOvertimePeriod = null)
+    public (List<OvertimePeriod> insertOvertime, IEnumerable<OvertimePeriod> updateOvertime) Handler(Period overtimePeriod, List<OvertimePeriod> historyOvertimePeriod = null)
     {
         var overtimeSettings = OvertimeSettings(overtimePeriod.Start);
 
@@ -56,42 +56,47 @@ public class OvertimeHandler
         }
 
         // recover 
-        var updateOvertime = new List<OvertimePeriod>();
-
         if (historyOvertimePeriod == null)
         {
-            return (insertOvertime, updateOvertime);
+            return (insertOvertime, Enumerable.Empty<OvertimePeriod>());
+        }
+
+        var currentHasDayRate = insertOvertime.Any(a => a.Type == EnumRateType.Day);
+
+        if (currentHasDayRate == false)
+        {
+            return (insertOvertime, Enumerable.Empty<OvertimePeriod>());
         }
 
         var historyNightRateOvertimes = historyOvertimePeriod.Where(a => a.Type == EnumRateType.Night).ToList();
-        var historyHasNotDayRate = historyOvertimePeriod.Any(a => a.Type == EnumRateType.Day) == false;
-        var currentHasDayRate = insertOvertime.Any(a => a.Type == EnumRateType.Day);
 
-        if (historyNightRateOvertimes.Any()
-            && historyHasNotDayRate
-            && currentHasDayRate)
+        if (historyNightRateOvertimes.Any() == false)
         {
-            // check setting have history cross day
-            var maxHistoryOvertimeEnd = historyNightRateOvertimes.Max(a => a.End);
-            var currentHistoryOvertimeEnd = insertOvertime.Max(a => a.End);
+            return (insertOvertime, Enumerable.Empty<OvertimePeriod>());
+        }
 
-            if (maxHistoryOvertimeEnd.Date != currentHistoryOvertimeEnd.Date)
-            {
-                overtimeSettings.AddRange(OvertimeSettings(maxHistoryOvertimeEnd));
-            }
+        // check setting have history cross day
+        var maxHistoryOvertimeEnd = historyNightRateOvertimes.Max(a => a.End);
+        var currentHistoryOvertimeEnd = insertOvertime.Max(a => a.End);
 
-            // check every history
-            foreach (var nightRateOvertime in historyNightRateOvertimes)
-            {
-                updateOvertime.AddRange(overtimeSettings.Select(a => new
-                                                        {
-                                                            Setting = a,
-                                                            NewPeriod = a.Period.OverlapPeriod(nightRateOvertime.ToNewPeriod())
-                                                        })
-                                                        .Where(a => a.NewPeriod != null)
-                                                        .Select(a => new OvertimePeriod(a.NewPeriod, a.Setting.Rate, true))
-                                                        .ToList());
-            }
+        if (maxHistoryOvertimeEnd.Date != currentHistoryOvertimeEnd.Date)
+        {
+            overtimeSettings.AddRange(OvertimeSettings(maxHistoryOvertimeEnd));
+        }
+
+        var updateOvertime = new List<OvertimePeriod>();
+
+        // check every history
+        foreach (var nightRateOvertime in historyNightRateOvertimes)
+        {
+            updateOvertime.AddRange(overtimeSettings.Select(a => new
+                                                    {
+                                                        Setting = a,
+                                                        NewPeriod = a.Period.OverlapPeriod(nightRateOvertime.ToNewPeriod())
+                                                    })
+                                                    .Where(a => a.NewPeriod != null)
+                                                    .Select(a => new OvertimePeriod(a.NewPeriod, a.Setting.Rate, true))
+                                                    .ToList());
         }
 
         return (insertOvertime, updateOvertime);
