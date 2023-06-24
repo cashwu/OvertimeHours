@@ -19,15 +19,11 @@ public class OvertimeHandler
     {
         var overtimeSettings = OvertimeSettings(overtimePeriod.Start);
 
-        if (overtimePeriod.IsCrossDay)
-        {
-            overtimeSettings.AddRange(OvertimeSettings(overtimePeriod.End));
-        }
+        var secondDate = overtimePeriod.IsCrossDay
+                             ? overtimePeriod.End
+                             : overtimePeriod.Start.Date.AddDays(1);
 
-        if (historyOvertimePeriod != null)
-        {
-            // TODO check history type data 
-        }
+        overtimeSettings.AddRange(OvertimeSettings(secondDate));
 
         var insertOvertime = new List<OvertimePeriod>();
 
@@ -41,16 +37,11 @@ public class OvertimeHandler
                 continue;
             }
 
-            bool anyDayOvertime;
+            var overtimePeriods = historyOvertimePeriod == null
+                                      ? insertOvertime
+                                      : insertOvertime.Concat(historyOvertimePeriod);
 
-            if (historyOvertimePeriod == null)
-            {
-                anyDayOvertime = insertOvertime.Any(a => a.Type == EnumRateType.Day);
-            }
-            else
-            {
-                anyDayOvertime = insertOvertime.Concat(historyOvertimePeriod).Any(a => a.Type == EnumRateType.Day);
-            }
+            var anyDayOvertime = overtimePeriods.Any(a => a.Type == EnumRateType.Day);
 
             insertOvertime.Add(new OvertimePeriod(period, setting.Rate, anyDayOvertime));
         }
@@ -73,15 +64,6 @@ public class OvertimeHandler
         if (historyNightRateOvertimes.Any() == false)
         {
             return (insertOvertime, Enumerable.Empty<OvertimePeriod>());
-        }
-
-        // check setting have history cross day
-        var maxHistoryOvertimeEnd = historyNightRateOvertimes.Max(a => a.End);
-        var currentHistoryOvertimeEnd = insertOvertime.Max(a => a.End);
-
-        if (maxHistoryOvertimeEnd.Date != currentHistoryOvertimeEnd.Date)
-        {
-            overtimeSettings.AddRange(OvertimeSettings(maxHistoryOvertimeEnd));
         }
 
         var updateOvertime = new List<OvertimePeriod>();
