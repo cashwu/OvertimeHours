@@ -68,16 +68,26 @@ public class OvertimeHandler
                 && historyHasNotDayRate
                 && currentHasDayRate)
             {
-                var historyNightRateOvertime = historyNightRateOvertimes[0].ToPeriod();
+                // check setting have history cross day
+                var maxHistoryOvertimeEnd = historyNightRateOvertimes.Max(a => a.End);
+                var currentHistoryOvertimeEnd = insertOvertime.Max(a => a.End);
 
-                updateOvertime = overtimeSettings.Select(a => new
-                                                 {
-                                                     Setting = a,
-                                                     NewPeriod = a.Period.OverlapPeriod(historyNightRateOvertime)
-                                                 })
-                                                 .Where(a => a.NewPeriod != null)
-                                                 .Select(a => new OvertimePeriod(a.NewPeriod, a.Setting.Rate, true))
-                                                 .ToList();
+                if (maxHistoryOvertimeEnd.Date != currentHistoryOvertimeEnd.Date)
+                {
+                    overtimeSettings.AddRange(OvertimeSettings(maxHistoryOvertimeEnd));
+                }
+
+                foreach (var nightRateOvertime in historyNightRateOvertimes)
+                {
+                    updateOvertime.AddRange(overtimeSettings.Select(a => new
+                                                            {
+                                                                Setting = a,
+                                                                NewPeriod = a.Period.OverlapPeriod(nightRateOvertime.ToPeriod())
+                                                            })
+                                                            .Where(a => a.NewPeriod != null)
+                                                            .Select(a => new OvertimePeriod(a.NewPeriod, a.Setting.Rate, true))
+                                                            .ToList());
+                }
             }
         }
 
