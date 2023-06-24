@@ -361,6 +361,68 @@ public class OvertimeHandlerHasHistoryTests
         });
     }
 
+    /// <summary>
+    /// holiday -> workday 
+    /// 
+    /// history
+    /// workday 21 - 22 (150), 22 - 23 (210)
+    /// 
+    /// overtime
+    /// holiday 23 - 02
+    ///
+    /// real overtime rate
+    /// 23 - 00 (390), 00 - 02 (210, not 200)
+    ///
+    /// history
+    /// workday 21 - 22 (150 not change), 22 - 23 (210 not change)
+    /// </summary>
+    [Fact]
+    public void history_day_night_workday_overtime_and_holiday_night_cross_day_overlap()
+    {
+        var historyOvertimePeriod = new List<OvertimePeriod>
+        {
+            new()
+            {
+                Start = new DateTime(2023, 06, 04, 21, 00, 00),
+                End = new DateTime(2023, 06, 04, 22, 00, 00),
+                Rate = 150,
+                Type = EnumRateType.Day
+            },
+            new()
+            {
+                Start = new DateTime(2023, 06, 04, 22, 00, 00),
+                End = new DateTime(2023, 06, 04, 23, 00, 00),
+                Rate = 210,
+                Type = EnumRateType.Night
+            },
+        };
+
+        var overtimePeriod = GivenOvertimePeriod(06, 03, 23,
+                                                 06, 04, 02);
+
+        var (insertOvertime, updateOvertime) = _overtimeHandler.Handler(overtimePeriod, historyOvertimePeriod);
+
+        insertOvertime.Should().BeEquivalentTo(new List<OvertimePeriod>
+        {
+            new()
+            {
+                Start = new DateTime(2023, 06, 03, 23, 00, 00),
+                End = new DateTime(2023, 06, 04, 00, 00, 00),
+                Rate = 390,
+                Type = EnumRateType.Night
+            },
+            new()
+            {
+                Start = new DateTime(2023, 06, 04, 00, 00, 00),
+                End = new DateTime(2023, 06, 04, 02, 00, 00),
+                Rate = 210,
+                Type = EnumRateType.Night
+            },
+        });
+
+        updateOvertime.Should().BeEmpty();
+    }
+
     private static Period GivenOvertimePeriod(int startMonth, int startDay, int startHour,
                                               int endMonth, int endDay, int endHour)
     {
