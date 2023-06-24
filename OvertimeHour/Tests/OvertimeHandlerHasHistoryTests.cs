@@ -294,7 +294,7 @@ public class OvertimeHandlerHasHistoryTests
     /// workday -> holiday
     /// 
     /// history
-    /// 22 - 00 (200), 00 - 01 (200)
+    /// 22 - 00 (200), 00 - 01 (390)
     /// 
     /// overtime
     /// 20 - 22
@@ -303,31 +303,31 @@ public class OvertimeHandlerHasHistoryTests
     /// 20 - 22 (150)
     ///
     /// history
-    /// 22 - 00 (200 -> 210), 00 - 01 (200 -> 210)
+    /// 22 - 00 (200 -> 210), 00 - 01 (390 -> 390 not change)
     /// </summary>
-    [Fact(Skip = "skip")]
+    [Fact]
     public void history_night_cross_holiday_overtime_and_workday_day_overlap()
     {
         var historyOvertimePeriod = new List<OvertimePeriod>
         {
             new()
             {
-                Start = new DateTime(2023, 06, 01, 22, 00, 00),
-                End = new DateTime(2023, 06, 02, 00, 00, 00),
+                Start = new DateTime(2023, 06, 02, 22, 00, 00),
+                End = new DateTime(2023, 06, 03, 00, 00, 00),
                 Rate = 200,
                 Type = EnumRateType.Night
             },
             new()
             {
-                Start = new DateTime(2023, 06, 02, 00, 00, 00),
-                End = new DateTime(2023, 06, 02, 01, 00, 00),
-                Rate = 200,
+                Start = new DateTime(2023, 06, 03, 00, 00, 00),
+                End = new DateTime(2023, 06, 03, 01, 00, 00),
+                Rate = 390,
                 Type = EnumRateType.Night
             },
         };
 
-        var overtimePeriod = GivenOvertimePeriod(06, 01, 20,
-                                                 06, 01, 22);
+        var overtimePeriod = GivenOvertimePeriod(06, 02, 20,
+                                                 06, 02, 22);
 
         var (insertOvertime, updateOvertime) = _overtimeHandler.Handler(overtimePeriod, historyOvertimePeriod);
 
@@ -335,8 +335,8 @@ public class OvertimeHandlerHasHistoryTests
         {
             new()
             {
-                Start = new DateTime(2023, 06, 01, 20, 00, 00),
-                End = new DateTime(2023, 06, 01, 22, 00, 00),
+                Start = new DateTime(2023, 06, 02, 20, 00, 00),
+                End = new DateTime(2023, 06, 02, 22, 00, 00),
                 Rate = 150,
                 Type = EnumRateType.Day
             },
@@ -346,16 +346,16 @@ public class OvertimeHandlerHasHistoryTests
         {
             new()
             {
-                Start = new DateTime(2023, 06, 01, 22, 00, 00),
-                End = new DateTime(2023, 06, 02, 00, 00, 00),
+                Start = new DateTime(2023, 06, 02, 22, 00, 00),
+                End = new DateTime(2023, 06, 03, 00, 00, 00),
                 Rate = 210,
                 Type = EnumRateType.Night
             },
             new()
             {
-                Start = new DateTime(2023, 06, 02, 00, 00, 00),
-                End = new DateTime(2023, 06, 02, 01, 00, 00),
-                Rate = 210,
+                Start = new DateTime(2023, 06, 03, 00, 00, 00),
+                End = new DateTime(2023, 06, 03, 01, 00, 00),
+                Rate = 390,
                 Type = EnumRateType.Night
             },
         });
