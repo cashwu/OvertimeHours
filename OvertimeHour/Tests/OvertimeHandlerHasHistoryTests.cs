@@ -18,7 +18,7 @@ public class OvertimeHandlerHasHistoryTests
     /// workday
     /// 
     /// history
-    /// 20 - 22
+    /// 20 - 22 (150)
     /// 
     /// overtime
     /// 22 - 23
@@ -36,7 +36,7 @@ public class OvertimeHandlerHasHistoryTests
                 Start = new DateTime(2023, 06, 01, 20, 00, 00),
                 End = new DateTime(2023, 06, 01, 22, 00, 00),
                 Rate = 150,
-                Type = EnumRateType.Day // TODO history not type data ??
+                Type = EnumRateType.Day
             }
         };
 
@@ -111,6 +111,108 @@ public class OvertimeHandlerHasHistoryTests
                 Start = new DateTime(2023, 06, 01, 22, 00, 00),
                 End = new DateTime(2023, 06, 01, 23, 00, 00),
                 Rate = 210,
+                Type = EnumRateType.Night
+            }
+        });
+    }
+
+    /// <summary>
+    /// holiday
+    /// 
+    /// history
+    /// 20 - 22 (300)
+    /// 
+    /// overtime
+    /// 22 - 23
+    ///
+    /// real overtime rate
+    /// 22 - 23 (390) 
+    /// </summary>
+    [Fact]
+    public void history_day_overtime_and_holiday_night_overlap()
+    {
+        var historyOvertimePeriod = new List<OvertimePeriod>
+        {
+            new()
+            {
+                Start = new DateTime(2023, 06, 03, 20, 00, 00),
+                End = new DateTime(2023, 06, 03, 22, 00, 00),
+                Rate = 300,
+                Type = EnumRateType.Day
+            }
+        };
+
+        var overtimePeriod = GivenOvertimePeriod(06, 03, 22,
+                                                 06, 03, 23);
+
+        var (insertOvertime, updateOvertime) = _overtimeHandler.Handler(overtimePeriod, historyOvertimePeriod);
+
+        insertOvertime.Should().BeEquivalentTo(new List<OvertimePeriod>
+        {
+            new()
+            {
+                Start = new DateTime(2023, 06, 03, 22, 00, 00),
+                End = new DateTime(2023, 06, 03, 23, 00, 00),
+                Rate = 390,
+                Type = EnumRateType.Night
+            }
+        });
+
+        updateOvertime.Should().BeEmpty();
+    }
+
+    /// <summary>
+    /// holiday
+    /// 
+    /// history
+    /// 22 - 23 (390)
+    /// 
+    /// overtime
+    /// 20 - 22
+    ///
+    /// real overtime rate
+    /// 20 - 22 (300)
+    ///
+    /// history
+    /// 22 - 23 (390 -> 390 not change)
+    /// </summary>
+    [Fact]
+    public void history_night_overtime_and_holiday_day_overlap()
+    {
+        var historyOvertimePeriod = new List<OvertimePeriod>
+        {
+            new()
+            {
+                Start = new DateTime(2023, 06, 03, 22, 00, 00),
+                End = new DateTime(2023, 06, 03, 23, 00, 00),
+                Rate = 390,
+                Type = EnumRateType.Night
+            }
+        };
+
+        var overtimePeriod = GivenOvertimePeriod(06, 03, 20,
+                                                 06, 03, 22);
+
+        var (insertOvertime, updateOvertime) = _overtimeHandler.Handler(overtimePeriod, historyOvertimePeriod);
+
+        insertOvertime.Should().BeEquivalentTo(new List<OvertimePeriod>
+        {
+            new()
+            {
+                Start = new DateTime(2023, 06, 03, 20, 00, 00),
+                End = new DateTime(2023, 06, 03, 22, 00, 00),
+                Rate = 300,
+                Type = EnumRateType.Day
+            },
+        });
+
+        updateOvertime.Should().BeEquivalentTo(new List<OvertimePeriod>
+        {
+            new()
+            {
+                Start = new DateTime(2023, 06, 03, 22, 00, 00),
+                End = new DateTime(2023, 06, 03, 23, 00, 00),
+                Rate = 390,
                 Type = EnumRateType.Night
             }
         });
