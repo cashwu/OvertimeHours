@@ -58,36 +58,39 @@ public class OvertimeHandler
         // recover 
         var updateOvertime = new List<OvertimePeriod>();
 
-        if (historyOvertimePeriod != null)
+        if (historyOvertimePeriod == null)
         {
-            var historyNightRateOvertimes = historyOvertimePeriod.Where(a => a.Type == EnumRateType.Night).ToList();
-            var historyHasNotDayRate = historyOvertimePeriod.Any(a => a.Type == EnumRateType.Day) == false;
-            var currentHasDayRate = insertOvertime.Any(a => a.Type == EnumRateType.Day);
+            return (insertOvertime, updateOvertime);
+        }
 
-            if (historyNightRateOvertimes.Any()
-                && historyHasNotDayRate
-                && currentHasDayRate)
+        var historyNightRateOvertimes = historyOvertimePeriod.Where(a => a.Type == EnumRateType.Night).ToList();
+        var historyHasNotDayRate = historyOvertimePeriod.Any(a => a.Type == EnumRateType.Day) == false;
+        var currentHasDayRate = insertOvertime.Any(a => a.Type == EnumRateType.Day);
+
+        if (historyNightRateOvertimes.Any()
+            && historyHasNotDayRate
+            && currentHasDayRate)
+        {
+            // check setting have history cross day
+            var maxHistoryOvertimeEnd = historyNightRateOvertimes.Max(a => a.End);
+            var currentHistoryOvertimeEnd = insertOvertime.Max(a => a.End);
+
+            if (maxHistoryOvertimeEnd.Date != currentHistoryOvertimeEnd.Date)
             {
-                // check setting have history cross day
-                var maxHistoryOvertimeEnd = historyNightRateOvertimes.Max(a => a.End);
-                var currentHistoryOvertimeEnd = insertOvertime.Max(a => a.End);
+                overtimeSettings.AddRange(OvertimeSettings(maxHistoryOvertimeEnd));
+            }
 
-                if (maxHistoryOvertimeEnd.Date != currentHistoryOvertimeEnd.Date)
-                {
-                    overtimeSettings.AddRange(OvertimeSettings(maxHistoryOvertimeEnd));
-                }
-
-                foreach (var nightRateOvertime in historyNightRateOvertimes)
-                {
-                    updateOvertime.AddRange(overtimeSettings.Select(a => new
-                                                            {
-                                                                Setting = a,
-                                                                NewPeriod = a.Period.OverlapPeriod(nightRateOvertime.ToPeriod())
-                                                            })
-                                                            .Where(a => a.NewPeriod != null)
-                                                            .Select(a => new OvertimePeriod(a.NewPeriod, a.Setting.Rate, true))
-                                                            .ToList());
-                }
+            // check every history
+            foreach (var nightRateOvertime in historyNightRateOvertimes)
+            {
+                updateOvertime.AddRange(overtimeSettings.Select(a => new
+                                                        {
+                                                            Setting = a,
+                                                            NewPeriod = a.Period.OverlapPeriod(nightRateOvertime.ToNewPeriod())
+                                                        })
+                                                        .Where(a => a.NewPeriod != null)
+                                                        .Select(a => new OvertimePeriod(a.NewPeriod, a.Setting.Rate, true))
+                                                        .ToList());
             }
         }
 
