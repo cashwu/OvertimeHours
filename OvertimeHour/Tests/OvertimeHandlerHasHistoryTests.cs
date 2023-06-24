@@ -5,11 +5,11 @@ using OvertimeHour.Enums;
 namespace OvertimeHour.Tests;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
-public class OvertimeHandlerForPreOvertimeTests
+public class OvertimeHandlerHasHistoryTests
 {
     private readonly OvertimeHandler _overtimeHandler;
 
-    public OvertimeHandlerForPreOvertimeTests()
+    public OvertimeHandlerHasHistoryTests()
     {
         _overtimeHandler = new OvertimeHandler(GivenOvertimeSettings(), GivenCalenderSettings());
     }
@@ -113,6 +113,77 @@ public class OvertimeHandlerForPreOvertimeTests
                 Rate = 210,
                 Type = EnumRateType.Night
             }
+        });
+    }
+
+    /// <summary>
+    /// workday
+    /// 
+    /// history
+    /// 22 - 00 (200), 00 - 01 (200)
+    /// 
+    /// overtime
+    /// 20 - 22
+    ///
+    /// real overtime rate
+    /// 20 - 22 (150)
+    ///
+    /// history
+    /// 22 - 00 (200 -> 210), 00 - 01 (200 -> 210)
+    /// </summary>
+    [Fact]
+    public void history_night_cross_day_overtime_workday_day_overlap()
+    {
+        var historyOvertimePeriod = new List<OvertimePeriod>
+        {
+            new()
+            {
+                Start = new DateTime(2023, 06, 01, 22, 00, 00),
+                End = new DateTime(2023, 06, 02, 00, 00, 00),
+                Rate = 200,
+                Type = EnumRateType.Night
+            },
+            new()
+            {
+                Start = new DateTime(2023, 06, 02, 00, 00, 00),
+                End = new DateTime(2023, 06, 02, 01, 00, 00),
+                Rate = 200,
+                Type = EnumRateType.Night
+            },
+        };
+
+        var overtimePeriod = GivenOvertimePeriod(06, 01, 20,
+                                                 06, 01, 22);
+
+        var (insertOvertime, updateOvertime) = _overtimeHandler.Handler(overtimePeriod, historyOvertimePeriod);
+
+        insertOvertime.Should().BeEquivalentTo(new List<OvertimePeriod>
+        {
+            new()
+            {
+                Start = new DateTime(2023, 06, 01, 20, 00, 00),
+                End = new DateTime(2023, 06, 01, 22, 00, 00),
+                Rate = 150,
+                Type = EnumRateType.Day
+            },
+        });
+
+        updateOvertime.Should().BeEquivalentTo(new List<OvertimePeriod>
+        {
+            new()
+            {
+                Start = new DateTime(2023, 06, 01, 22, 00, 00),
+                End = new DateTime(2023, 06, 02, 00, 00, 00),
+                Rate = 210,
+                Type = EnumRateType.Night
+            },
+            new()
+            {
+                Start = new DateTime(2023, 06, 02, 00, 00, 00),
+                End = new DateTime(2023, 06, 02, 01, 00, 00),
+                Rate = 210,
+                Type = EnumRateType.Night
+            },
         });
     }
 
