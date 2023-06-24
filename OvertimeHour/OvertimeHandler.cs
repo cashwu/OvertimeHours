@@ -47,24 +47,13 @@ public class OvertimeHandler
         }
 
         // recover 
-        if (historyOvertimePeriod == null)
+        if (historyOvertimePeriod == null
+            || insertOvertime.Any(a => a.Type == EnumRateType.Day) == false)
         {
             return (insertOvertime, Enumerable.Empty<OvertimePeriod>());
         }
 
-        var currentHasDayRate = insertOvertime.Any(a => a.Type == EnumRateType.Day);
-
-        if (currentHasDayRate == false)
-        {
-            return (insertOvertime, Enumerable.Empty<OvertimePeriod>());
-        }
-
-        var historyNightRateOvertimes = historyOvertimePeriod.Where(a => a.Type == EnumRateType.Night).ToList();
-
-        if (historyNightRateOvertimes.Any() == false)
-        {
-            return (insertOvertime, Enumerable.Empty<OvertimePeriod>());
-        }
+        var historyNightRateOvertimes = historyOvertimePeriod.Where(a => a.Type == EnumRateType.Night);
 
         var updateOvertime = new List<OvertimePeriod>();
 
@@ -77,8 +66,7 @@ public class OvertimeHandler
                                                         NewPeriod = a.Period.OverlapPeriod(nightRateOvertime.ToNewPeriod())
                                                     })
                                                     .Where(a => a.NewPeriod != null)
-                                                    .Select(a => new OvertimePeriod(a.NewPeriod, a.Setting.Rate, true))
-                                                    .ToList());
+                                                    .Select(a => new OvertimePeriod(a.NewPeriod, a.Setting.Rate, true)));
         }
 
         return (insertOvertime, updateOvertime);
